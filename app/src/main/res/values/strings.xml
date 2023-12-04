@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Open Secrets</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="repeat_password">Repeat Password</string>
+    <string name="sign_up"><u>Sign Up</u></string>
+    <string name="login">Login</string>
+    <string name="check_password">Passwords are not the same. Make sure you entered your password correctly.</string>
+    <string name="username_taken">Username taken.</string>
 </resources>
