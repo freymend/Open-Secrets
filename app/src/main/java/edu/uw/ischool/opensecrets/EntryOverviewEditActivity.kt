@@ -15,14 +15,31 @@ class EntryOverviewEditActivity : AppCompatActivity() {
         binding = EntryOverviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.optionButton.setOnClickListener {
-            startActivity(Intent(this, OptionActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION))
+            startActivity(
+                Intent(
+                    this,
+                    OptionActivity::class.java
+                ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            )
         }
         binding.homeButton.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION))
-            overridePendingTransition(0, 0)
+            startActivity(
+                Intent(
+                    this,
+                    MainActivity::class.java
+                ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            )
         }
         binding.searchButton.setOnClickListener {
-            startActivity(Intent(this, SearchActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION))
+            startActivity(
+                Intent(
+                    this,
+                    SearchActivity::class.java
+                ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            )
         }
     }
 }

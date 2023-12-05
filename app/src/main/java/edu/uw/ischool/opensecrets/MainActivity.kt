@@ -21,12 +21,14 @@ class MainActivity : AppCompatActivity() {
         val journal = File(filesDir, "journal.json")
 
         Log.d("file", journal.path.toString())
-        val prefs = this.getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE)
+        val prefs =
+            this.getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE)
         Log.d("filePrefAll", prefs.all.toString())
         if (prefs.getString("username", null) == null ||
-            prefs.getString("password", null) == null) {
+            prefs.getString("password", null) == null
+        ) {
             Log.d("fileExist", journal.exists().toString())
-            if (!journal.exists() ) {
+            if (!journal.exists()) {
                 Log.d("fileCreate", journal.createNewFile().toString())
             }
             startActivity(Intent(this, LoginActivity::class.java))
@@ -36,13 +38,31 @@ class MainActivity : AppCompatActivity() {
             binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
             binding.searchButton.setOnClickListener {
-                startActivity(Intent(this, SearchActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION))
+                startActivity(
+                    Intent(
+                        this,
+                        SearchActivity::class.java
+                    ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                )
             }
             binding.addButton.setOnClickListener {
-                startActivity(Intent(this, EntryTextActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION))
+                startActivity(
+                    Intent(
+                        this,
+                        EntryTextActivity::class.java
+                    ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                )
             }
             binding.optionButton.setOnClickListener {
-                startActivity(Intent(this, OptionActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION))
+                startActivity(
+                    Intent(
+                        this,
+                        OptionActivity::class.java
+                    ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                )
             }
         }
     }

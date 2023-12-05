@@ -14,13 +14,31 @@ class OptionActivity : AppCompatActivity() {
         binding = OptionBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.addButton.setOnClickListener {
-            startActivity(Intent(this, EntryTextActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION))
+            startActivity(
+                Intent(
+                    this,
+                    EntryTextActivity::class.java
+                ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            )
         }
         binding.homeButton.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION))
+            startActivity(
+                Intent(
+                    this,
+                    MainActivity::class.java
+                ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            )
         }
         binding.searchButton.setOnClickListener {
-            startActivity(Intent(this, SearchActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION))
+            startActivity(
+                Intent(
+                    this,
+                    SearchActivity::class.java
+                ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            )
         }
     }
 }
