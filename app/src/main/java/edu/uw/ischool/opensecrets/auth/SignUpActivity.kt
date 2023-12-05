@@ -73,6 +73,7 @@ class SignUpActivity : AppCompatActivity() {
 
                 runOnUiThread {
                     if (response.getBoolean("registered")) {
+//                        TODO: put home screen here
                         startActivity(Intent(this, MainActivity::class.java))
                     } else {
                         Toast.makeText(this, getString(R.string.username_taken), Toast.LENGTH_SHORT)

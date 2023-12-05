@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import edu.uw.ischool.opensecrets.MainActivity
@@ -65,6 +66,7 @@ class LoginActivity : AppCompatActivity() {
 
                 runOnUiThread {
                     if (response.getBoolean("authenticated")) {
+//                        TODO: put home screen here
                         startActivity(Intent(this, MainActivity::class.java))
                     } else {
                         Toast.makeText(this, getString(R.string.login_failed), Toast.LENGTH_SHORT).show()
