@@ -8,4 +8,12 @@
     <string name="add_page_desc">Add a new journal page</string>
     <string name="option_page_desc">Option page</string>
     <string name="home_page_desc">Home page</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="repeat_password">Repeat Password</string>
+    <string name="sign_up"><u>Sign Up</u></string>
+    <string name="login">Login</string>
+    <string name="check_password">Passwords are not the same. Make sure you entered your password correctly.</string>
+    <string name="username_taken">Username taken.</string>
+    <string name="login_failed">Incorrect username or password.</string>
 </resources>
