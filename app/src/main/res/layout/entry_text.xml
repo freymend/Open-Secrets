@@ -24,7 +24,7 @@
         android:layout_height="2dp"
         app:layout_constraintTop_toBottomOf="@+id/title"
         android:layout_margin="16dp"
-        android:background="@color/material_dynamic_neutral10" />
+        android:background="@color/black" />
     <EditText
         android:id="@+id/entry"
         android:layout_width="match_parent"
