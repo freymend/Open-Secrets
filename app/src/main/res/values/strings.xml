@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Open Secrets</string>
+    <string name="home">Home</string>
+    <string name="add">Add</string>
+    <string name="search">Search</string>
+    <string name="option">Option</string>
+    <string name="search_page_desc">Search page</string>
+    <string name="add_page_desc">Add a new journal page</string>
+    <string name="option_page_desc">Option page</string>
+    <string name="home_page_desc">Home page</string>
 </resources>
