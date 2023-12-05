@@ -1,4 +1,5 @@
 <resources>
+    <string name="preference_key">edu.uw.ischool.opensecrets.PREFERENCE_FILE_KEY</string>
     <string name="app_name">Open Secrets</string>
     <string name="home">Home</string>
     <string name="add">Add</string>

@@ -1,5 +1,6 @@
 package edu.uw.ischool.opensecrets
 
+import android.content.Context
 import android.content.Intent
 
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +21,16 @@ class MainActivity : AppCompatActivity() {
         Log.i("MainActivity", filesDir.toString())
 
         val journal = File(filesDir, "journal.json")
-        if (!journal.exists()) {
+
+        Log.d("file", journal.path.toString())
+        val prefs = this.getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE)
+        Log.d("filePrefAll", prefs.all.toString())
+        if (prefs.getString("username", null) == null ||
+            prefs.getString("password", null) == null) {
+            Log.d("fileExist", journal.exists().toString())
+            if (!journal.exists() ) {
+                Log.d("fileCreate", journal.createNewFile().toString())
+            }
             startActivity(Intent(this, LoginActivity::class.java))
         } else {
 //            TODO: put home screen here
