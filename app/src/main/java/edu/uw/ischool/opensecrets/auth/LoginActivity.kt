@@ -66,6 +66,8 @@ class LoginActivity : AppCompatActivity() {
                 runOnUiThread {
                     if (response.getBoolean("authenticated")) {
                         startActivity(Intent(this, MainActivity::class.java))
+                    } else {
+                        Toast.makeText(this, getString(R.string.login_failed), Toast.LENGTH_SHORT).show()
                     }
                 }
             }.start()
