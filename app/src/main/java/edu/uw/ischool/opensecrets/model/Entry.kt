@@ -7,5 +7,5 @@ data class Entry(
     val title: String,
     val color: String,
     val text: String,
-    val dataCreated: Date
+    val dateCreated: Date
 )

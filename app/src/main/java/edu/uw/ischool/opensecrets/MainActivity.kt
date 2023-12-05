@@ -8,8 +8,6 @@ import android.os.Bundle
 import edu.uw.ischool.opensecrets.auth.LoginActivity
 import java.io.File
 import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
 import edu.uw.ischool.opensecrets.databinding.ActivityMainBinding
 
 
