@@ -7,7 +7,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import edu.uw.ischool.opensecrets.MainActivity
 import edu.uw.ischool.opensecrets.R
 import org.json.JSONObject
 import java.io.BufferedOutputStream
@@ -74,7 +73,12 @@ class SignUpActivity : AppCompatActivity() {
                 runOnUiThread {
                     if (response.getBoolean("registered")) {
 //                        TODO: put home screen here
-                        startActivity(Intent(this, MainActivity::class.java))
+                        startActivity(
+                            Intent(
+                                this,
+                                LoginActivity::class.java
+                            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        )
                     } else {
                         Toast.makeText(this, getString(R.string.username_taken), Toast.LENGTH_SHORT)
                             .show()

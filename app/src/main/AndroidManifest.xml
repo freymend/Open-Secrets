@@ -16,6 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OpenSecrets"
         tools:targetApi="31">
+        <activity android:name=".OptionActivity" />
+        <activity android:name=".EntryOverviewEditActivity" />
+        <activity android:name=".EntryTextActivity" />
+        <activity android:name=".SearchActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

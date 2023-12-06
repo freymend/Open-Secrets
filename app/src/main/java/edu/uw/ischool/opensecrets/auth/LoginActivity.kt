@@ -1,7 +1,9 @@
 package edu.uw.ischool.opensecrets.auth
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -67,7 +69,12 @@ class LoginActivity : AppCompatActivity() {
                 runOnUiThread {
                     if (response.getBoolean("authenticated")) {
 //                        TODO: put home screen here
-                        startActivity(Intent(this, MainActivity::class.java))
+                        val prefs = this.getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE)
+                        val prefsEditor = prefs.edit()
+                        prefsEditor.putString("username", username.text.toString())
+                        prefsEditor.putString("password", password.text.toString())
+                        prefsEditor.apply()
+                        startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                     } else {
                         Toast.makeText(this, getString(R.string.login_failed), Toast.LENGTH_SHORT).show()
                     }
