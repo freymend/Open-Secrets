@@ -69,14 +69,23 @@ class LoginActivity : AppCompatActivity() {
                 runOnUiThread {
                     if (response.getBoolean("authenticated")) {
 //                        TODO: put home screen here
-                        val prefs = this.getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE)
+                        val prefs = this.getSharedPreferences(
+                            getString(R.string.preference_key),
+                            Context.MODE_PRIVATE
+                        )
                         val prefsEditor = prefs.edit()
                         prefsEditor.putString("username", username.text.toString())
                         prefsEditor.putString("password", password.text.toString())
                         prefsEditor.apply()
-                        startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                        startActivity(
+                            Intent(
+                                this,
+                                MainActivity::class.java
+                            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        )
                     } else {
-                        Toast.makeText(this, getString(R.string.login_failed), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.login_failed), Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             }.start()
