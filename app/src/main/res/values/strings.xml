@@ -17,4 +17,12 @@
     <string name="check_password">Passwords are not the same. Make sure you entered your password correctly.</string>
     <string name="username_taken">Username taken.</string>
     <string name="login_failed">Incorrect username or password.</string>
+    <string-array name="color_array">
+        <item>red</item>
+        <item>blue</item>
+        <item>green</item>
+        <item>purple</item>
+        <item>orange</item>
+        <item>yellow</item>
+    </string-array>
 </resources>
