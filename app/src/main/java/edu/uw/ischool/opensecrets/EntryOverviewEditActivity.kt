@@ -7,6 +7,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import edu.uw.ischool.opensecrets.databinding.EntryOverviewBinding
 import edu.uw.ischool.opensecrets.model.Entry
 import java.util.Calendar
@@ -70,12 +71,24 @@ class EntryOverviewEditActivity : AppCompatActivity() {
                 id: Long
             ) {
                 when (colors[position]) {
-                    "red" -> binding.colorPreview.background = getDrawable(R.color.red)
-                    "blue" -> binding.colorPreview.background = getDrawable(R.color.blue)
-                    "green" -> binding.colorPreview.background = getDrawable(R.color.green)
-                    "purple" -> binding.colorPreview.background = getDrawable(R.color.purple)
-                    "yellow" -> binding.colorPreview.background = getDrawable(R.color.yellow)
-                    "orange" -> binding.colorPreview.background = getDrawable(R.color.orange)
+                    "red" -> binding.colorPreview.background =
+                        ResourcesCompat.getDrawable(resources, R.color.red, null)
+
+                    "blue" -> binding.colorPreview.background =
+                        ResourcesCompat.getDrawable(resources, R.color.blue, null)
+
+                    "green" -> binding.colorPreview.background =
+                        ResourcesCompat.getDrawable(resources, R.color.green, null)
+
+                    "purple" -> binding.colorPreview.background =
+                        ResourcesCompat.getDrawable(resources, R.color.purple, null)
+
+                    "yellow" -> binding.colorPreview.background =
+                        ResourcesCompat.getDrawable(resources, R.color.yellow, null)
+
+                    "orange" -> binding.colorPreview.background =
+                        ResourcesCompat.getDrawable(resources, R.color.orange, null)
+
                     else -> {}
                 }
             }

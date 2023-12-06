@@ -18,10 +18,11 @@ class SecretApp : Application() {
         super.onCreate()
     }
 
-    fun journalExist() : Boolean {
+    fun journalExist(): Boolean {
         return journal.exists()
     }
-    fun appendEntry(entry: Entry) : Boolean {
+
+    fun appendEntry(entry: Entry): Boolean {
         // check if journal exist
         if (journalExist()) {
             // load og data
@@ -69,7 +70,7 @@ class SecretApp : Application() {
         }
     }
 
-    private fun verifyJSON(ogData: JSONArray, newData: JSONArray) : Boolean {
+    private fun verifyJSON(ogData: JSONArray, newData: JSONArray): Boolean {
         return ogData.toString() == newData.toString()
     }
 }
