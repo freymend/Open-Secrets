@@ -15,12 +15,14 @@ class EntryTextActivity : AppCompatActivity() {
         binding = EntryTextBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.overview.setOnClickListener {
+            val intent = Intent(
+                this,
+                EntryOverviewEditActivity::class.java
+            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            intent.putExtra(EntryOverviewEditActivity.ENTRY, binding.entry.text.toString())
             startActivity(
-                Intent(
-                    this,
-                    EntryOverviewEditActivity::class.java
-                ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                intent
             )
         }
         binding.optionButton.setOnClickListener {
