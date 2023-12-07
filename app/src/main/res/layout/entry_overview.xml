@@ -7,26 +7,6 @@
     tools:context=".EntryOverviewEditActivity">
 
     <TextView
-        android:id="@+id/title"
-        style="@style/TextAppearance.AppCompat.Display1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Entry Overview"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/colored_bar"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_margin="16dp"
-        android:background="@color/black"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
-
-    <TextView
         android:id="@+id/entry_title_label"
         style="@style/TextAppearance.AppCompat.Body2"
         android:layout_width="match_parent"
@@ -86,6 +66,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/color_spinner" />
+
+    <LinearLayout
+        android:id="@+id/colored_bar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/title"
+            style="@style/TextAppearance.AppCompat.Display1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Open Secret"
+            android:padding="16dp"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"

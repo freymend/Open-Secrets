@@ -6,27 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".EntryTextActivity">
 
-    <TextView
-        android:id="@+id/title"
-        style="@style/TextAppearance.AppCompat.Display1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Journal"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/colored_bar"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_margin="16dp"
-        android:background="@color/black"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
-
     <EditText
         android:id="@+id/entry"
         android:layout_width="match_parent"
@@ -51,6 +30,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/entry" />
 
+    <LinearLayout
+        android:id="@+id/colored_bar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/title"
+            style="@style/TextAppearance.AppCompat.Display1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Journal"
+            android:padding="16dp"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
