@@ -9,6 +9,7 @@ import org.json.JSONObject
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
+import java.text.SimpleDateFormat
 
 class SecretApp : Application() {
 
@@ -72,5 +73,41 @@ class SecretApp : Application() {
 
     private fun verifyJSON(ogData: JSONArray, newData: JSONArray): Boolean {
         return ogData.toString() == newData.toString()
+    }
+
+    fun loadEntry(): List<Entry>? {
+        if (journalExist()) {
+            val inputStream = FileReader(journal)
+            var data: JSONArray
+            inputStream.use {
+                data = try {
+                    JSONArray(it.readText())
+
+                } catch (e: JSONException) {
+                    JSONArray()
+                }
+            }
+            inputStream.close()
+            val tmpList = mutableListOf<Entry>()
+            for (index in 0 until data.length()) {
+                val value = data.getJSONObject(index)
+                val title = value.getString("title")
+                val text = value.getString("text")
+                val color = value.getString("color")
+                val dateCreatedString = value.getString("dateCreated")
+                val dateFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy")
+                val dateCreated = dateFormat.parse(dateCreatedString)
+                tmpList.add(
+                    Entry(
+                        title = title,
+                        text = text,
+                        color = color,
+                        dateCreated = dateCreated
+                    )
+                )
+            }
+            return tmpList.toList()
+        }
+        return null
     }
 }

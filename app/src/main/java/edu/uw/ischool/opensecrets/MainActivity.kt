@@ -7,6 +7,8 @@ import android.os.Bundle
 import edu.uw.ischool.opensecrets.auth.LoginActivity
 import java.io.File
 import android.util.Log
+import android.view.View
+import edu.uw.ischool.opensecrets.adapter.EntryAdapter
 import edu.uw.ischool.opensecrets.databinding.ActivityMainBinding
 
 
@@ -27,13 +29,11 @@ class MainActivity : AppCompatActivity() {
             prefs.getString("password", null) == null
         ) {
             Log.d("fileExist", journal.exists().toString())
-            if (!journal.exists()) {
+            if (!(this.application as SecretApp).journalExist()) {
                 Log.d("fileCreate", journal.createNewFile().toString())
             }
             startActivity(Intent(this, LoginActivity::class.java))
         } else {
-//            TODO: put home screen here
-
             binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
             binding.searchButton.setOnClickListener {
@@ -62,6 +62,17 @@ class MainActivity : AppCompatActivity() {
                     ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                 )
+            }
+
+            val entries = (this.application as SecretApp).loadEntry()
+
+            if (entries.isNullOrEmpty()) {
+                binding.entryListView.visibility = View.GONE
+                binding.noEntryItem.visibility = View.VISIBLE
+            } else {
+                binding.noEntryItem.visibility = View.GONE
+                binding.entryListView.visibility = View.VISIBLE
+                binding.entryListView.adapter = EntryAdapter(this, entries)
             }
         }
     }

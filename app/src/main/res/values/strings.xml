@@ -17,6 +17,11 @@
     <string name="check_password">Passwords are not the same. Make sure you entered your password correctly.</string>
     <string name="username_taken">Username taken.</string>
     <string name="login_failed">Incorrect username or password.</string>
+    <string name="title">Journal Title</string>
+    <string name="secondary_text">This is will be the body text\n</string>
+    <string name="entry_item_color">the color of the entry</string>
+    <string name="date_text">12-12-2000</string>
+    <string name="no_entry_yet">No entry yet...</string>
     <string-array name="color_array">
         <item>red</item>
         <item>blue</item>
