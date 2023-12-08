@@ -99,8 +99,8 @@ class EntryOverviewEditActivity : AppCompatActivity() {
 
 
         binding.entrySaveButton.setOnClickListener {
-            if (binding.title.text.isEmpty()) {
-                Toast.makeText(this, "Title Should not be empty", Toast.LENGTH_SHORT).show()
+            if (binding.entryTitle.text.isEmpty()) {
+                Toast.makeText(this, "Title should not be empty", Toast.LENGTH_SHORT).show()
             } else {
                 val status = (this.application as SecretApp).appendEntry(
                     Entry(
