@@ -10,12 +10,7 @@ import androidx.core.widget.addTextChangedListener
 import edu.uw.ischool.opensecrets.MainActivity
 import edu.uw.ischool.opensecrets.R
 import edu.uw.ischool.opensecrets.SecretApp
-import org.json.JSONObject
-import java.io.BufferedOutputStream
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
+import util.Request.post
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,31 +34,13 @@ class LoginActivity : AppCompatActivity() {
         }
         login.setOnClickListener {
             Thread {
-                val response =
-                    with(URL("https://not-open-secrets.fly.dev/login").openConnection() as HttpURLConnection) {
-                        requestMethod = "POST"
-
-                        connectTimeout = 5000
-
-                        setRequestProperty("Content-Type", "application/json")
-                        setRequestProperty("Accept", "application/json")
-
-                        doOutput = true
-                        setChunkedStreamingMode(0)
-                        BufferedOutputStream(outputStream).use {
-                            it.write(
-                                """{
-                                    "username": "${username.text}",
-                                    "password": "${password.text}"
-                                }""".trimIndent().toByteArray()
-                            )
-                            it.flush()
-                        }
-
-                        BufferedReader(InputStreamReader(inputStream)).use {
-                            JSONObject(it.readText())
-                        }
-                    }
+                val response = post(
+                    "https://not-open-secrets.fly.dev/login",
+                    """{
+                        "username": "${username.text}",
+                        "password": "${password.text}"
+                    }""".trimIndent()
+                )
 
                 runOnUiThread {
                     if (response.getBoolean("authenticated")) {
