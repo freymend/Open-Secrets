@@ -39,19 +39,19 @@ class SignUpActivity : AppCompatActivity() {
                 Toast.makeText(this, getString(R.string.check_password), Toast.LENGTH_SHORT).show()
             }
             Thread {
-                val response = post("https://not-open-secrets.fly.dev/register",
-                    """{
+                val response = post(
+                    "https://not-open-secrets.fly.dev/register", """{
                         "username": "${username.text}",
                         "password": "${password.text}"
-                    }""".trimIndent())
+                    }""".trimIndent()
+                )
 
                 runOnUiThread {
                     if (response.getBoolean("registered")) {
 //                        TODO: put home screen here
                         startActivity(
                             Intent(
-                                this,
-                                LoginActivity::class.java
+                                this, LoginActivity::class.java
                             ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         )
                     } else {
