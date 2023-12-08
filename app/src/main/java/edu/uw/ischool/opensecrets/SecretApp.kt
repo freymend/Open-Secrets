@@ -1,6 +1,7 @@
 package edu.uw.ischool.opensecrets
 
 import android.app.Application
+import android.util.Log
 import android.widget.Toast
 import edu.uw.ischool.opensecrets.model.Entry
 import org.json.JSONArray
@@ -109,5 +110,57 @@ class SecretApp : Application() {
             return tmpList.toList()
         }
         return null
+    }
+
+    fun deleteEntry(pos: Int): Boolean {
+        // check if journal exist
+        if (journalExist()) {
+            // load og data
+            val inputStream = FileReader(journal)
+            var data: JSONArray
+            inputStream.use {
+                data = try {
+                    JSONArray(it.readText())
+
+                } catch (e: JSONException) {
+                    JSONArray()
+                }
+            }
+            inputStream.close()
+            val oldValue = data.get(pos)
+            // remove entry from data and verify removal finish
+            if (oldValue == data.remove(pos)) {
+                // create new file directory
+                val fileOutput = File(filesDir, "new_journal.json")
+                fileOutput.createNewFile()
+
+                // write to new file
+                val outputStream = FileWriter(fileOutput)
+                outputStream.use {
+                    it.write(data.toString())
+                    it.flush()
+                }
+
+                outputStream.close()
+
+                // check file data
+                val newData = FileReader(fileOutput).use {
+                    JSONArray(it.readText())
+                }
+                if (verifyJSON(data, newData)) {
+                    journal.delete()
+                    fileOutput.renameTo(File(filesDir, "journal.json"))
+                } else {
+                    Toast.makeText(this, "data not the same", Toast.LENGTH_SHORT).show()
+                }
+                return true
+            } else {
+                Log.d("delete", "wrong pos")
+                return false
+            }
+        } else {
+            Log.d("delete", "no journal exist")
+            return false
+        }
     }
 }
