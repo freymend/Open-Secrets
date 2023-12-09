@@ -12,12 +12,16 @@ import java.io.FileReader
 import java.io.FileWriter
 import java.text.SimpleDateFormat
 
-class JournalManager(val context: Context) {
+class JournalManager(private val context: Context) {
 
     private var journal: File = File(context.filesDir, "journal.json")
 
     fun journalExist(): Boolean {
         return journal.exists()
+    }
+
+    fun createJournal() : Boolean{
+        return journal.createNewFile()
     }
 
     fun appendEntry(entry: Entry): Boolean {

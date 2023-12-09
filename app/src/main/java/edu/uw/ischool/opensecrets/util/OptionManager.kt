@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import edu.uw.ischool.opensecrets.R
 
-class OptionManager(val context: Context) {
+class OptionManager(context: Context) {
 
     private val prefs: SharedPreferences = context.getSharedPreferences(
         context.resources.getString(R.string.preference_key),
@@ -14,6 +14,7 @@ class OptionManager(val context: Context) {
     companion object {
         const val USERNAME = "username"
         const val PASSWORD = "password"
+        const val MIN_TIME = "min_time"
     }
 
     fun getUsername(): String? {
@@ -30,5 +31,13 @@ class OptionManager(val context: Context) {
 
     fun updateUsername(username: String) {
         prefs.edit().putString(USERNAME, username).apply()
+    }
+
+    fun getMinTime() : Float {
+        return prefs.getFloat(MIN_TIME, 5.0F)
+    }
+
+    fun updateMinTime(minTime: Float)  {
+        prefs.edit().putFloat(MIN_TIME, minTime).apply()
     }
 }

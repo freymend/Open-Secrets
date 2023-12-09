@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        android:text="Entry Title"
+        android:text="@string/entry_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/colored_bar" />
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:hint="Title..."
+        android:hint="@string/title_hint"
         android:inputType="text|textAutoComplete|textMultiLine"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/entry_title_label" />
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        android:text="Color"
+        android:text="@string/color_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/entry_title" />
@@ -62,16 +62,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Save Entry"
+        android:text="@string/save_entry"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/color_spinner" />
+
     <Button
         android:id="@+id/entry_edit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Update Entry"
+        android:text="@string/update_entry"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/color_spinner" />
@@ -82,13 +83,14 @@
         android:layout_height="80dp"
         android:background="?attr/colorPrimary"
         app:layout_constraintTop_toTopOf="parent">
+
         <TextView
             android:id="@+id/title"
             style="@style/TextAppearance.AppCompat.Display1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Open Secret"
             android:padding="16dp"
+            android:text="@string/journal"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -122,6 +124,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:contentDescription="@string/home_button_desc"
                 android:scaleType="fitCenter"
                 android:src="@drawable/round_home_24" />
 
@@ -132,6 +135,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:contentDescription="@string/search_button_desc"
                 android:scaleType="fitCenter"
                 android:src="@drawable/round_search_24" />
 
@@ -142,6 +146,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:contentDescription="@string/add_button_desc"
                 android:scaleType="fitCenter"
                 android:src="@drawable/round_add_24" />
 
@@ -152,6 +157,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:contentDescription="@string/option_page_navigation_button"
                 android:scaleType="fitCenter"
                 android:src="@drawable/round_settings_24" />
 

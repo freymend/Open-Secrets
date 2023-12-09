@@ -20,8 +20,26 @@
     <string name="title">Journal Title</string>
     <string name="secondary_text">This is will be the body text\n</string>
     <string name="entry_item_color">the color of the entry</string>
-    <string name="date_text">12-12-2000</string>
-    <string name="no_entry_yet">No entry yet...</string>
+    <string name="date_text">12–12–2000</string>
+    <string name="no_entry_yet">No entry yet…</string>
+    <string name="saved_option">Option Saved.</string>
+    <string name="save">Save</string>
+    <string name="minimum_time">Minimum Time</string>
+    <string name="journal">Journal</string>
+    <string name="next">Next</string>
+    <string name="secret">Secret…</string>
+    <string name="open_secret">Open Secret</string>
+    <string name="search_button_desc">search page navigation button</string>
+    <string name="option_page_navigation_button">option page navigation button</string>
+    <string name="home_button_desc">home page navigation button</string>
+    <string name="add_button_desc">add journal page navigation button</string>
+    <string name="entry_title">Entry Title</string>
+    <string name="title_hint">Title…</string>
+    <string name="color_hint">Color</string>
+    <string name="save_entry">Save Entry</string>
+    <string name="update_entry">Update Entry</string>
+    <string name="a_number">a number</string>
+    <string name="_1l">1L</string>
     <string-array name="color_array">
         <item>red</item>
         <item>blue</item>

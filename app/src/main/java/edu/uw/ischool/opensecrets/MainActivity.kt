@@ -2,12 +2,10 @@ package edu.uw.ischool.opensecrets
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import edu.uw.ischool.opensecrets.auth.LoginActivity
-import java.io.File
 import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
@@ -23,15 +21,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.i("MainActivity", filesDir.toString())
 
-        val journal = File(filesDir, "journal.json")
-
-        Log.d("file", journal.path.toString())
         if ((this.application as SecretApp).optionManager.getUsername() == null ||
             (this.application as SecretApp).optionManager.getPassword() == null
         ) {
-            Log.d("fileExist", journal.exists().toString())
             if (!(this.application as SecretApp).journalManager.journalExist()) {
-                Log.d("fileCreate", journal.createNewFile().toString())
+                Log.d("fileCreate", (this.application as SecretApp).journalManager.createJournal().toString())
             }
             startActivity(Intent(this, LoginActivity::class.java))
         } else {
