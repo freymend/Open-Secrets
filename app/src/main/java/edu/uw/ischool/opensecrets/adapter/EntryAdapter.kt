@@ -1,13 +1,14 @@
 package edu.uw.ischool.opensecrets.adapter
 
 import android.content.Context
-
+import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
+import edu.uw.ischool.opensecrets.EntryTextActivity
 import edu.uw.ischool.opensecrets.R
 import edu.uw.ischool.opensecrets.model.Entry
 import java.text.SimpleDateFormat
@@ -41,6 +42,22 @@ class EntryAdapter(
         val deleteButton: ImageButton = view.findViewById(R.id.delete_button)
         deleteButton.setOnClickListener {
             deleteCall(position)
+        }
+        val editButton: ImageButton = view.findViewById(R.id.edit_button)
+        editButton.setOnClickListener {
+            val intent = Intent(
+                context,
+                EntryTextActivity::class.java
+            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            intent.putExtra(EntryTextActivity.EDIT, "true")
+            intent.putExtra(EntryTextActivity.INDEX, position.toString())
+            intent.putExtra(EntryTextActivity.TEXT, entries[position].text)
+            intent.putExtra(EntryTextActivity.TITLE, entries[position].title)
+            intent.putExtra(EntryTextActivity.COLOR, entries[position].color)
+            context.startActivity(
+                intent
+            )
         }
         return view
     }

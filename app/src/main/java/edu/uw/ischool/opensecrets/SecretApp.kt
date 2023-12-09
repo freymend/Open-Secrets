@@ -163,4 +163,52 @@ class SecretApp : Application() {
             return false
         }
     }
+
+    fun updateEntry(pos: Int, entry: Entry): Boolean {
+        // check if journal exist
+        if (journalExist()) {
+            // load og data
+            val inputStream = FileReader(journal)
+            var data: JSONArray
+            inputStream.use {
+                data = try {
+                    JSONArray(it.readText())
+
+                } catch (e: JSONException) {
+                    JSONArray()
+                }
+            }
+            inputStream.close()
+            // create new data obj
+            val jsonEntry = JSONObject()
+            jsonEntry.put("title", entry.title)
+            jsonEntry.put("text", entry.text)
+            jsonEntry.put("color", entry.color)
+            jsonEntry.put("dateCreated", entry.dateCreated.toString())
+            data.put(pos, jsonEntry)
+            // create new file directory
+            val fileOutput = File(filesDir, "new_journal.json")
+            fileOutput.createNewFile()
+            // write to new file
+            val outputStream = FileWriter(fileOutput)
+            outputStream.use {
+                it.write(data.toString())
+                it.flush()
+            }
+            outputStream.close()
+            // check file data
+            val newData = FileReader(fileOutput).use {
+                JSONArray(it.readText())
+            }
+            if (verifyJSON(data, newData)) {
+                journal.delete()
+                fileOutput.renameTo(File(filesDir, "journal.json"))
+            } else {
+                Toast.makeText(this, "data not the same", Toast.LENGTH_SHORT).show()
+            }
+            return true
+        } else {
+            return false
+        }
+    }
 }

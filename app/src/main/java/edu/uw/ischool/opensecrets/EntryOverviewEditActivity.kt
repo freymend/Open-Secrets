@@ -19,6 +19,10 @@ class EntryOverviewEditActivity : AppCompatActivity() {
 
     companion object {
         const val ENTRY = "entry"
+        const val UPDATE = "update"
+        const val POSITION = "position"
+        const val TITLE = "title"
+        const val COLOR = "color"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,30 +101,72 @@ class EntryOverviewEditActivity : AppCompatActivity() {
             }
         }
 
-
-        binding.entrySaveButton.setOnClickListener {
-            if (binding.entryTitle.text.isEmpty()) {
-                Toast.makeText(this, "Title should not be empty", Toast.LENGTH_SHORT).show()
-            } else {
-                val status = (this.application as SecretApp).appendEntry(
-                    Entry(
-                        binding.entryTitle.text.toString(),
-                        binding.colorSpinner.selectedItem as String,
-                        intent?.extras?.getString(ENTRY).toString(),
-                        Calendar.getInstance().time
-                    )
-                )
-
-                if (status) {
-                    startActivity(
-                        Intent(
-                            this,
-                            MainActivity::class.java
-                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                            .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                    )
+        val updateCheck = this.intent?.extras?.getString(UPDATE).toBoolean()
+        if (updateCheck) {
+            // setUpdateListener
+            // hide save button
+            // show edit button
+            binding.entryEditButton.visibility = View.VISIBLE
+            binding.entrySaveButton.visibility = View.GONE
+            val colorExtra = intent?.extras?.getString(COLOR).toString()
+            binding.colorSpinner.setSelection(colors.asList().indexOf(colorExtra))
+            val titleExtra = intent?.extras?.getString(TITLE).toString()
+            binding.entryTitle.setText(titleExtra)
+            binding.entryEditButton.setOnClickListener {
+                if (binding.entryTitle.text.isEmpty()) {
+                    Toast.makeText(this, "Title should not be empty", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(this, "Failed to write data", Toast.LENGTH_LONG).show()
+                    val pos = intent?.extras?.getString(POSITION).toString().toInt()
+                    val status = (this.application as SecretApp).updateEntry(
+                        pos,
+                        Entry(
+                            binding.entryTitle.text.toString(),
+                            binding.colorSpinner.selectedItem as String,
+                            intent?.extras?.getString(ENTRY).toString(),
+                            Calendar.getInstance().time
+                        )
+                    )
+
+                    if (status) {
+                        startActivity(
+                            Intent(
+                                this,
+                                MainActivity::class.java
+                            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                        )
+                    } else {
+                        Toast.makeText(this, "Failed to write data", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        } else {
+            binding.entryEditButton.visibility = View.GONE
+            binding.entrySaveButton.visibility = View.VISIBLE
+            binding.entrySaveButton.setOnClickListener {
+                if (binding.entryTitle.text.isEmpty()) {
+                    Toast.makeText(this, "Title should not be empty", Toast.LENGTH_SHORT).show()
+                } else {
+                    val status = (this.application as SecretApp).appendEntry(
+                        Entry(
+                            binding.entryTitle.text.toString(),
+                            binding.colorSpinner.selectedItem as String,
+                            intent?.extras?.getString(ENTRY).toString(),
+                            Calendar.getInstance().time
+                        )
+                    )
+
+                    if (status) {
+                        startActivity(
+                            Intent(
+                                this,
+                                MainActivity::class.java
+                            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                        )
+                    } else {
+                        Toast.makeText(this, "Failed to write data", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }
