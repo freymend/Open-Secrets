@@ -2,12 +2,10 @@ package edu.uw.ischool.opensecrets
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import edu.uw.ischool.opensecrets.auth.LoginActivity
-import java.io.File
 import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
@@ -23,18 +21,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.i("MainActivity", filesDir.toString())
 
-        val journal = File(filesDir, "journal.json")
-
-        Log.d("file", journal.path.toString())
-        val prefs =
-            this.getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE)
-        Log.d("filePrefAll", prefs.all.toString())
-        if (prefs.getString("username", null) == null ||
-            prefs.getString("password", null) == null
+        if ((this.application as SecretApp).optionManager.getUsername() == null ||
+            (this.application as SecretApp).optionManager.getPassword() == null
         ) {
-            Log.d("fileExist", journal.exists().toString())
-            if (!(this.application as SecretApp).journalExist()) {
-                Log.d("fileCreate", journal.createNewFile().toString())
+            if (!(this.application as SecretApp).journalManager.journalExist()) {
+                Log.d("fileCreate", (this.application as SecretApp).journalManager.createJournal().toString())
             }
             startActivity(Intent(this, LoginActivity::class.java))
         } else {
@@ -51,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             this.supportFragmentManager.setFragmentResultListener(
                 "delete_event",
                 this
-            ) { key, bundle ->
+            ) { _, bundle ->
 
                 val result = bundle.getString("delete_event").toBoolean()
                 if (result) {
@@ -92,7 +83,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             // load data.
-            val entries = (this.application as SecretApp).loadEntry()
+            val entries = (this.application as SecretApp).journalManager.loadEntry()
 
             // check data before loading correct view.
             if (entries.isNullOrEmpty()) {
@@ -113,7 +104,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun deleteEntry(pos: Int) {
         val dialog =
-            DeleteEntryDialogFragment((this.application as SecretApp)::deleteEntry)
+            DeleteEntryDialogFragment((this.application as SecretApp).journalManager::deleteEntry)
         val args = Bundle()
         args.putInt("pos", pos)
         dialog.arguments = args
@@ -136,7 +127,7 @@ class MainActivity : AppCompatActivity() {
                 // Use the Builder class for convenient dialog construction.
                 val builder = AlertDialog.Builder(it)
                 builder.setMessage("Do you want to delete this entry?")
-                    .setPositiveButton("Yes") { dialog, id ->
+                    .setPositiveButton("Yes") { _, _ ->
                         val pos = arguments?.getInt("pos")
                         if (pos != null) {
                             if (deleteFn(pos)) {
@@ -153,7 +144,7 @@ class MainActivity : AppCompatActivity() {
 
                         }
                     }
-                    .setNegativeButton("No") { dialog, id ->
+                    .setNegativeButton("No") { _, _ ->
                         // User cancelled the dialog.
                     }
                 // Create the AlertDialog object and return it.

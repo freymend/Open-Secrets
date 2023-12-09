@@ -117,7 +117,7 @@ class EntryOverviewEditActivity : AppCompatActivity() {
                     Toast.makeText(this, "Title should not be empty", Toast.LENGTH_SHORT).show()
                 } else {
                     val pos = intent?.extras?.getString(POSITION).toString().toInt()
-                    val status = (this.application as SecretApp).updateEntry(
+                    val status = (this.application as SecretApp).journalManager.updateEntry(
                         pos,
                         Entry(
                             binding.entryTitle.text.toString(),
@@ -147,7 +147,7 @@ class EntryOverviewEditActivity : AppCompatActivity() {
                 if (binding.entryTitle.text.isEmpty()) {
                     Toast.makeText(this, "Title should not be empty", Toast.LENGTH_SHORT).show()
                 } else {
-                    val status = (this.application as SecretApp).appendEntry(
+                    val status = (this.application as SecretApp).journalManager.appendEntry(
                         Entry(
                             binding.entryTitle.text.toString(),
                             binding.colorSpinner.selectedItem as String,

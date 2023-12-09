@@ -37,13 +37,14 @@
         android:layout_height="80dp"
         android:background="?attr/colorPrimary"
         app:layout_constraintTop_toTopOf="parent">
+
         <TextView
             android:id="@+id/title"
             style="@style/TextAppearance.AppCompat.Display1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Open Secret"
             android:padding="16dp"
+            android:text="@string/open_secret"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,6 +78,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:contentDescription="@string/home_button_desc"
                 android:scaleType="fitCenter"
                 android:src="@drawable/round_home_24" />
 
@@ -87,6 +89,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:contentDescription="@string/search_button_desc"
                 android:scaleType="fitCenter"
                 android:src="@drawable/round_search_24" />
 
@@ -97,6 +100,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:contentDescription="@string/add_button_desc"
                 android:scaleType="fitCenter"
                 android:src="@drawable/round_add_24" />
 
@@ -107,6 +111,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:contentDescription="@string/option_page_navigation_button"
                 android:scaleType="fitCenter"
                 android:src="@drawable/round_settings_24" />
 
