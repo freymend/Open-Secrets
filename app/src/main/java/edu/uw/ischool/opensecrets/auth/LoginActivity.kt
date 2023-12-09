@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import edu.uw.ischool.opensecrets.MainActivity
 import edu.uw.ischool.opensecrets.R
+import edu.uw.ischool.opensecrets.SecretApp
 import org.json.JSONObject
 import java.io.BufferedOutputStream
 import java.io.BufferedReader
@@ -68,15 +69,8 @@ class LoginActivity : AppCompatActivity() {
 
                 runOnUiThread {
                     if (response.getBoolean("authenticated")) {
-//                        TODO: put home screen here
-                        val prefs = this.getSharedPreferences(
-                            getString(R.string.preference_key),
-                            Context.MODE_PRIVATE
-                        )
-                        val prefsEditor = prefs.edit()
-                        prefsEditor.putString("username", username.text.toString())
-                        prefsEditor.putString("password", password.text.toString())
-                        prefsEditor.apply()
+                        (this.application as SecretApp).optionManager.updateUsername(username.text.toString())
+                        (this.application as SecretApp).optionManager.updatePassword(password.text.toString())
                         startActivity(
                             Intent(
                                 this,
