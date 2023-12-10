@@ -5,17 +5,9 @@ import android.app.AlarmManager
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.widget.Toast
 import edu.uw.ischool.opensecrets.model.ContactMessager
 import edu.uw.ischool.opensecrets.model.Entry
-import org.json.JSONArray
-import org.json.JSONException
-import org.json.JSONObject
-import java.io.File
-import java.io.FileReader
-import java.io.FileWriter
 import android.content.Context
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
@@ -32,7 +24,6 @@ import edu.uw.ischool.opensecrets.util.OptionManager
 const val CHANNEL_ID = "OpenSecretNotifications"
 class SecretApp : Application() {
 
-    private lateinit var journal: File
     private val contactMessager : ContactMessager = ContactMessager()
     lateinit var messageQueue : TimedMessageQueue
     lateinit var alarmManager: AlarmManager
@@ -52,63 +43,6 @@ class SecretApp : Application() {
 //        queueSendEntry(sampleEntry)
     }
 
-    
-
-    fun journalExist(): Boolean {
-        return journal.exists()
-    }
-
-    fun appendEntry(entry: Entry): Boolean {
-        // check if journal exist
-        if (journalExist()) {
-            // load og data
-            val inputStream = FileReader(journal)
-            var data: JSONArray
-            inputStream.use {
-                data = try {
-                    JSONArray(it.readText())
-
-                } catch (e: JSONException) {
-                    JSONArray()
-                }
-            }
-            inputStream.close()
-            // create new data obj
-            val jsonEntry = JSONObject()
-            jsonEntry.put("title", entry.title)
-            jsonEntry.put("text", entry.text)
-            jsonEntry.put("color", entry.color)
-            jsonEntry.put("dateCreated", entry.dateCreated.toString())
-            data.put(jsonEntry)
-            // create new file directory
-            val fileOutput = File(filesDir, "new_journal.json")
-            fileOutput.createNewFile()
-            // write to new file
-            val outputStream = FileWriter(fileOutput)
-            outputStream.use {
-                it.write(data.toString())
-                it.flush()
-            }
-            outputStream.close()
-            // check file data
-            val newData = FileReader(fileOutput).use {
-                JSONArray(it.readText())
-            }
-            if (verifyJSON(data, newData)) {
-                journal.delete()
-                fileOutput.renameTo(File(filesDir, "journal.json"))
-            } else {
-                Toast.makeText(this, "data not the same", Toast.LENGTH_SHORT).show()
-            }
-            return true
-        } else {
-            return false
-        }
-    }
-
-    private fun verifyJSON(ogData: JSONArray, newData: JSONArray): Boolean {
-        return ogData.toString() == newData.toString()
-    }
     fun updateContactList() {
         Log.i("SecretApp", "updating contacts list!")
         val contacts : ArrayList<Contact> = contactMessager.getContactList(this)
@@ -137,13 +71,6 @@ class SecretApp : Application() {
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return
             }
             notify(messageID, builder.build())
