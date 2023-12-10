@@ -1,8 +1,7 @@
-package edu.uw.ischool.opensecrets
+package edu.uw.ischool.opensecrets.model
 
 import android.content.ContentResolver
 import android.provider.ContactsContract
-import android.util.Log
 import android.content.Context
 import android.os.Build
 import android.telephony.SmsManager
@@ -51,11 +50,13 @@ class ContactMessager {
         }
         return contactList
     }
-    fun sendMessageToRandom(messageText : String, context : Context){
+    fun sendMessageToRandom(messageText : String, context : Context) : Contact?{
         if(contactList.size > 0){
             val contact : Contact = contactList[Random.nextInt(contactList.size)]
             sendMessageToContact(contact, messageText, context)
+            return contact
         }
+        return null
     }
     fun sendMessageToContact(contact : Contact, messageText : String, context : Context){
         val sms: SmsManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -65,6 +66,11 @@ class ContactMessager {
         }
         sms.sendTextMessage(contact.phoneNumber, null, messageText, null, null)
     }
+//    val messager : ContactMessager = ContactMessager()
+//    messager.getContactList(this)
+//    for(contact : Contact in messager.contactList){
+//        Log.i("MAIN ACTIVITY", "${contact.name}: ${contact.phoneNumber}")
+//    }
 }
 
 data class Contact(var name: String, var phoneNumber: String)
