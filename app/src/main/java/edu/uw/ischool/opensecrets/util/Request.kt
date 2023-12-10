@@ -1,4 +1,4 @@
-package util
+package edu.uw.ischool.opensecrets.util
 
 import org.json.JSONObject
 import java.io.BufferedOutputStream

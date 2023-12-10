@@ -10,7 +10,7 @@ import androidx.core.widget.addTextChangedListener
 import edu.uw.ischool.opensecrets.MainActivity
 import edu.uw.ischool.opensecrets.R
 import edu.uw.ischool.opensecrets.SecretApp
-import util.Request.post
+import edu.uw.ischool.opensecrets.util.Request
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
         }
         login.setOnClickListener {
             Thread {
-                val response = post(
+                val response = Request.post(
                     "https://not-open-secrets.fly.dev/login",
                     """{
                         "username": "${username.text}",

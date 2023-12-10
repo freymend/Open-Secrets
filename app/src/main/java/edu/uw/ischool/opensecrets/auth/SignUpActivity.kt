@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import edu.uw.ischool.opensecrets.R
-import util.Request.post
+import edu.uw.ischool.opensecrets.util.Request
 
 class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +39,7 @@ class SignUpActivity : AppCompatActivity() {
                 Toast.makeText(this, getString(R.string.check_password), Toast.LENGTH_SHORT).show()
             }
             Thread {
-                val response = post(
+                val response = Request.post(
                     "https://not-open-secrets.fly.dev/register", """{
                         "username": "${username.text}",
                         "password": "${password.text}"

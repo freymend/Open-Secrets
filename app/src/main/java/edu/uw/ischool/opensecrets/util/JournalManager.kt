@@ -7,7 +7,6 @@ import edu.uw.ischool.opensecrets.model.Entry
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import util.Request
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
