@@ -25,6 +25,9 @@ import androidx.core.app.NotificationManagerCompat
 import edu.uw.ischool.opensecrets.model.Contact
 import edu.uw.ischool.opensecrets.model.TimedMessageQueue
 import java.util.Date
+import edu.uw.ischool.opensecrets.util.JournalManager
+import edu.uw.ischool.opensecrets.util.OptionManager
+
 
 const val CHANNEL_ID = "OpenSecretNotifications"
 class SecretApp : Application() {
@@ -35,8 +38,11 @@ class SecretApp : Application() {
     lateinit var alarmManager: AlarmManager
     private var messageID = 1
     private val sampleEntry : Entry = Entry("My Title", "blue", "Call me Ishmael. Some years ago...", Date())
+    lateinit var journalManager: JournalManager
+    lateinit var optionManager: OptionManager
     override fun onCreate() {
-        journal = File(filesDir, "journal.json")
+        journalManager = JournalManager(this)
+        optionManager = OptionManager(this)
         super.onCreate()
         createNotificationChannel()
         alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager

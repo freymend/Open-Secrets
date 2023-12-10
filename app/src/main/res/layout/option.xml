@@ -1,18 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".OptionActivity">
+
+    <LinearLayout
+        android:id="@+id/colored_bar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/TextAppearance.AppCompat.Display1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/option"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+
     <TextView
+        android:id="@+id/min_time_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Option"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/minimum_time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/colored_bar" />
+
+    <EditText
+        android:id="@+id/min_time_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:inputType="number"
+        android:minWidth="64dp"
+        android:minHeight="64dp"
+        android:text="@string/_1l"
+        android:hint="@string/a_number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/min_time_label" />
+
+    <Button
+        android:id="@+id/save_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
@@ -40,6 +86,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:contentDescription="@string/home_button_desc"
                 android:scaleType="fitCenter"
                 android:src="@drawable/round_home_24" />
 
@@ -50,6 +97,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:contentDescription="@string/search_button_desc"
                 android:scaleType="fitCenter"
                 android:src="@drawable/round_search_24" />
 
@@ -60,6 +108,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:contentDescription="@string/add_button_desc"
                 android:scaleType="fitCenter"
                 android:src="@drawable/round_add_24" />
 
@@ -70,11 +119,13 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:contentDescription="@string/option_page_navigation_button"
                 android:scaleType="fitCenter"
                 android:src="@drawable/round_settings_24" />
-
         </LinearLayout>
 
 
     </androidx.appcompat.widget.Toolbar>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
