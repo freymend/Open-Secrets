@@ -3,14 +3,15 @@ package edu.uw.ischool.opensecrets
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import edu.uw.ischool.opensecrets.auth.LoginActivity
 import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import edu.uw.ischool.opensecrets.adapter.EntryAdapter
+import edu.uw.ischool.opensecrets.auth.LoginActivity
 import edu.uw.ischool.opensecrets.databinding.ActivityMainBinding
 
 
@@ -25,7 +26,10 @@ class MainActivity : AppCompatActivity() {
             (this.application as SecretApp).optionManager.getPassword() == null
         ) {
             if (!(this.application as SecretApp).journalManager.journalExist()) {
-                Log.d("fileCreate", (this.application as SecretApp).journalManager.createJournal().toString())
+                Log.d(
+                    "fileCreate",
+                    (this.application as SecretApp).journalManager.createJournal().toString()
+                )
             }
             startActivity(Intent(this, LoginActivity::class.java))
         } else {
@@ -94,6 +98,28 @@ class MainActivity : AppCompatActivity() {
                 binding.entryListView.visibility = View.VISIBLE
                 binding.entryListView.adapter = EntryAdapter(this, entries, ::deleteEntry)
             }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Toast.makeText(this, getString(R.string.backing_up_journal), Toast.LENGTH_SHORT).show()
+
+        val username = (this.application as SecretApp).optionManager.getUsername()
+        if (!username.isNullOrEmpty()) {
+            Thread {
+                val status = (this.application as SecretApp).journalManager.backupJournal(username)
+
+                runOnUiThread {
+                    if (status) {
+                        Toast.makeText(this, getString(R.string.backup_success), Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(this, getString(R.string.backup_fail), Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            }.start()
         }
     }
 

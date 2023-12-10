@@ -7,6 +7,7 @@ import edu.uw.ischool.opensecrets.model.Entry
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import util.Request
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
@@ -15,6 +16,26 @@ import java.text.SimpleDateFormat
 class JournalManager(private val context: Context) {
 
     private var journal: File = File(context.filesDir, "journal.json")
+
+    fun backupJournal(username: String): Boolean {
+        if (journalExist()) {
+            val journal = loadData().toString()
+            try {
+                val response = Request.post("https://not-open-secrets.fly.dev/backup", """
+                    {
+                        "username": "$username",
+                        "journal": $journal
+                    }
+                """.trimIndent())
+                if (response.has("backedUp")) {
+                    return true
+                }
+            } catch (e: Exception) {
+                Log.e("backup", e.toString())
+            }
+        }
+        return false
+    }
 
     fun journalExist(): Boolean {
         return journal.exists()
