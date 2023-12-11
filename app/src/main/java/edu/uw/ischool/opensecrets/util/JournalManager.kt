@@ -36,12 +36,24 @@ class JournalManager(private val context: Context) {
         return false
     }
 
-    fun journalExist(): Boolean {
-        return journal.exists()
+    fun restoreJournal(username: String): Boolean {
+        if (journalExist()) {
+            return false
+        }
+
+        try {
+            val response = Request.get("https://not-open-secrets.fly.dev/restore?username=$username")
+            val fileOutput = writeNewFile(response)
+            updateOldFile(fileOutput, response)
+            return true
+        } catch (e: Exception) {
+            Log.e("restore", e.toString())
+        }
+        return false
     }
 
-    fun createJournal() : Boolean{
-        return journal.createNewFile()
+    fun journalExist(): Boolean {
+        return journal.exists()
     }
 
     fun appendEntry(entry: Entry): Boolean {

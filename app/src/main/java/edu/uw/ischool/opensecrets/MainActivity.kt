@@ -25,12 +25,6 @@ class MainActivity : AppCompatActivity() {
         if ((this.application as SecretApp).optionManager.getUsername() == null ||
             (this.application as SecretApp).optionManager.getPassword() == null
         ) {
-            if (!(this.application as SecretApp).journalManager.journalExist()) {
-                Log.d(
-                    "fileCreate",
-                    (this.application as SecretApp).journalManager.createJournal().toString()
-                )
-            }
             startActivity(Intent(this, LoginActivity::class.java))
         } else {
 
@@ -85,19 +79,28 @@ class MainActivity : AppCompatActivity() {
                         .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                 )
             }
+            Thread {
+                val username = (this.application as SecretApp).optionManager.getUsername()
+                if (!username.isNullOrEmpty()) {
+                    (this.application as SecretApp).journalManager.restoreJournal(username)
+                }
 
-            // load data.
-            val entries = (this.application as SecretApp).journalManager.loadEntry()
+                runOnUiThread {
+                    // load data.
+                    val entries = (this.application as SecretApp).journalManager.loadEntry()
 
-            // check data before loading correct view.
-            if (entries.isNullOrEmpty()) {
-                binding.entryListView.visibility = View.GONE
-                binding.noEntryItem.visibility = View.VISIBLE
-            } else {
-                binding.noEntryItem.visibility = View.GONE
-                binding.entryListView.visibility = View.VISIBLE
-                binding.entryListView.adapter = EntryAdapter(this, entries, ::deleteEntry)
-            }
+                    // check data before loading correct view.
+                    if (entries.isNullOrEmpty()) {
+                        binding.entryListView.visibility = View.GONE
+                        binding.noEntryItem.visibility = View.VISIBLE
+                    } else {
+                        binding.noEntryItem.visibility = View.GONE
+                        binding.entryListView.visibility = View.VISIBLE
+                        binding.entryListView.adapter = EntryAdapter(this, entries, ::deleteEntry)
+                    }
+                }
+            }.start()
+
         }
     }
 
