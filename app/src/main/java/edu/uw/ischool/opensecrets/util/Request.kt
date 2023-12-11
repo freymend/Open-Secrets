@@ -1,5 +1,6 @@
 package edu.uw.ischool.opensecrets.util
 
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.BufferedOutputStream
 import java.net.HttpURLConnection
@@ -27,7 +28,7 @@ object Request {
         }
     }
 
-    fun get(url: String): JSONObject {
+    fun get(url: String): JSONArray {
         with(URL(url).openConnection() as HttpURLConnection) {
             requestMethod = "GET"
             connectTimeout = 5000
@@ -36,7 +37,7 @@ object Request {
             setRequestProperty("Accept", "application/json")
 
             return inputStream.bufferedReader().use {
-                JSONObject(it.readText())
+                JSONArray(it.readText())
             }
         }
     }
