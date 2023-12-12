@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import edu.uw.ischool.opensecrets.adapter.EntryAdapter
@@ -20,7 +21,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i("MainActivity", filesDir.toString())
+
+        requestPermission()
+        (this.application as SecretApp).loadRepository()
 
         if ((this.application as SecretApp).optionManager.getUsername() == null || (this.application as SecretApp).optionManager.getPassword() == null) {
             startActivity(Intent(this, LoginActivity::class.java))
@@ -105,6 +108,18 @@ class MainActivity : AppCompatActivity() {
                 (this.application as SecretApp).journalManager.backupJournal(username)
             }.start()
         }
+    }
+
+    private fun requestPermission() {
+        requestPermissions(
+            arrayOf(
+                android.Manifest.permission.READ_CONTACTS,
+                android.Manifest.permission.INTERNET,
+                android.Manifest.permission.ACCESS_NETWORK_STATE,
+                android.Manifest.permission.SEND_SMS,
+                android.Manifest.permission.READ_PHONE_STATE,
+            ), 0
+        )
     }
 
     /**

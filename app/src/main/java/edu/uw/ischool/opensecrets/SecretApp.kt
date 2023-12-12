@@ -32,9 +32,12 @@ class SecretApp : Application() {
     lateinit var journalManager: JournalManager
     lateinit var optionManager: OptionManager
     override fun onCreate() {
+        super.onCreate()
+    }
+
+    fun loadRepository() {
         journalManager = JournalManager(this)
         optionManager = OptionManager(this)
-        super.onCreate()
         createNotificationChannel()
         alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         messageQueue = TimedMessageQueue(this, alarmManager, ::sendEntryToRandomContact)
