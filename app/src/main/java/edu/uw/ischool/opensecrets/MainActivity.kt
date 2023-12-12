@@ -3,14 +3,15 @@ package edu.uw.ischool.opensecrets
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import edu.uw.ischool.opensecrets.auth.LoginActivity
 import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import edu.uw.ischool.opensecrets.adapter.EntryAdapter
+import edu.uw.ischool.opensecrets.auth.LoginActivity
 import edu.uw.ischool.opensecrets.databinding.ActivityMainBinding
 
 
@@ -21,12 +22,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.i("MainActivity", filesDir.toString())
 
-        if ((this.application as SecretApp).optionManager.getUsername() == null ||
-            (this.application as SecretApp).optionManager.getPassword() == null
-        ) {
-            if (!(this.application as SecretApp).journalManager.journalExist()) {
-                Log.d("fileCreate", (this.application as SecretApp).journalManager.createJournal().toString())
-            }
+        if ((this.application as SecretApp).optionManager.getUsername() == null || (this.application as SecretApp).optionManager.getPassword() == null) {
             startActivity(Intent(this, LoginActivity::class.java))
         } else {
 
@@ -40,8 +36,7 @@ class MainActivity : AppCompatActivity() {
              * start a new activity. Just a guess, tho.
              */
             this.supportFragmentManager.setFragmentResultListener(
-                "delete_event",
-                this
+                "delete_event", this
             ) { _, bundle ->
 
                 val result = bundle.getString("delete_event").toBoolean()
@@ -57,8 +52,7 @@ class MainActivity : AppCompatActivity() {
             binding.searchButton.setOnClickListener {
                 startActivity(
                     Intent(
-                        this,
-                        SearchActivity::class.java
+                        this, SearchActivity::class.java
                     ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                 )
@@ -66,8 +60,7 @@ class MainActivity : AppCompatActivity() {
             binding.addButton.setOnClickListener {
                 startActivity(
                     Intent(
-                        this,
-                        EntryTextActivity::class.java
+                        this, EntryTextActivity::class.java
                     ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                 )
@@ -75,25 +68,42 @@ class MainActivity : AppCompatActivity() {
             binding.optionButton.setOnClickListener {
                 startActivity(
                     Intent(
-                        this,
-                        OptionActivity::class.java
+                        this, OptionActivity::class.java
                     ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                 )
             }
+            Thread {
+                val username = (this.application as SecretApp).optionManager.getUsername()
+                if (!username.isNullOrEmpty()) {
+                    (this.application as SecretApp).journalManager.restoreJournal(username)
+                }
 
-            // load data.
-            val entries = (this.application as SecretApp).journalManager.loadEntry()
+                runOnUiThread {
+                    // load data.
+                    val entries = (this.application as SecretApp).journalManager.loadEntry()
 
-            // check data before loading correct view.
-            if (entries.isNullOrEmpty()) {
-                binding.entryListView.visibility = View.GONE
-                binding.noEntryItem.visibility = View.VISIBLE
-            } else {
-                binding.noEntryItem.visibility = View.GONE
-                binding.entryListView.visibility = View.VISIBLE
-                binding.entryListView.adapter = EntryAdapter(this, entries, ::deleteEntry)
-            }
+                    // check data before loading correct view.
+                    if (entries.isNullOrEmpty()) {
+                        binding.entryListView.visibility = View.GONE
+                        binding.noEntryItem.visibility = View.VISIBLE
+                    } else {
+                        binding.noEntryItem.visibility = View.GONE
+                        binding.entryListView.visibility = View.VISIBLE
+                        binding.entryListView.adapter = EntryAdapter(this, entries, ::deleteEntry)
+                    }
+                }
+            }.start()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val username = (this.application as SecretApp).optionManager.getUsername()
+        if (!username.isNullOrEmpty()) {
+            Thread {
+                (this.application as SecretApp).journalManager.backupJournal(username)
+            }.start()
         }
     }
 
@@ -109,8 +119,7 @@ class MainActivity : AppCompatActivity() {
         args.putInt("pos", pos)
         dialog.arguments = args
         dialog.show(
-            this.supportFragmentManager,
-            "delete_entry"
+            this.supportFragmentManager, "delete_entry"
         )
     }
 
@@ -132,19 +141,16 @@ class MainActivity : AppCompatActivity() {
                         if (pos != null) {
                             if (deleteFn(pos)) {
                                 it.supportFragmentManager.setFragmentResult(
-                                    "delete_event",
-                                    bundleOf("delete_event" to "true")
+                                    "delete_event", bundleOf("delete_event" to "true")
                                 )
                             } else {
                                 it.supportFragmentManager.setFragmentResult(
-                                    "delete_event",
-                                    bundleOf("delete_event" to "false")
+                                    "delete_event", bundleOf("delete_event" to "false")
                                 )
                             }
 
                         }
-                    }
-                    .setNegativeButton("No") { _, _ ->
+                    }.setNegativeButton("No") { _, _ ->
                         // User cancelled the dialog.
                     }
                 // Create the AlertDialog object and return it.

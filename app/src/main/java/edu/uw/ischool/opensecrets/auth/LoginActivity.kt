@@ -10,12 +10,7 @@ import androidx.core.widget.addTextChangedListener
 import edu.uw.ischool.opensecrets.MainActivity
 import edu.uw.ischool.opensecrets.R
 import edu.uw.ischool.opensecrets.SecretApp
-import org.json.JSONObject
-import java.io.BufferedOutputStream
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
+import edu.uw.ischool.opensecrets.util.Request
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,11 +22,13 @@ class LoginActivity : AppCompatActivity() {
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
 
+        val isFilled = { username.text.isNotEmpty() && password.text.isNotEmpty() }
+
         username.addTextChangedListener {
-            login.isEnabled = username.text.isNotEmpty() && password.text.isNotEmpty()
+            login.isEnabled = isFilled()
         }
         password.addTextChangedListener {
-            login.isEnabled = username.text.isNotEmpty() && password.text.isNotEmpty()
+            login.isEnabled = isFilled()
         }
 
         findViewById<Button>(R.id.sign_up).setOnClickListener {
@@ -39,31 +36,12 @@ class LoginActivity : AppCompatActivity() {
         }
         login.setOnClickListener {
             Thread {
-                val response =
-                    with(URL("https://not-open-secrets.fly.dev/login").openConnection() as HttpURLConnection) {
-                        requestMethod = "POST"
-
-                        connectTimeout = 5000
-
-                        setRequestProperty("Content-Type", "application/json")
-                        setRequestProperty("Accept", "application/json")
-
-                        doOutput = true
-                        setChunkedStreamingMode(0)
-                        BufferedOutputStream(outputStream).use {
-                            it.write(
-                                """{
-                                    "username": "${username.text}",
-                                    "password": "${password.text}"
-                                }""".trimIndent().toByteArray()
-                            )
-                            it.flush()
-                        }
-
-                        BufferedReader(InputStreamReader(inputStream)).use {
-                            JSONObject(it.readText())
-                        }
-                    }
+                val response = Request.post(
+                    "https://not-open-secrets.fly.dev/login", """{
+                        "username": "${username.text}",
+                        "password": "${password.text}"
+                    }""".trimIndent()
+                )
 
                 runOnUiThread {
                     if (response.getBoolean("authenticated")) {
@@ -71,8 +49,7 @@ class LoginActivity : AppCompatActivity() {
                         (this.application as SecretApp).optionManager.updatePassword(password.text.toString())
                         startActivity(
                             Intent(
-                                this,
-                                MainActivity::class.java
+                                this, MainActivity::class.java
                             ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         )
                     } else {

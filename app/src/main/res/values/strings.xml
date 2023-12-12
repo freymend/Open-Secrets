@@ -40,6 +40,9 @@
     <string name="update_entry">Update Entry</string>
     <string name="a_number">a number</string>
     <string name="_1l">1L</string>
+    <string name="backing_up_journal">Backing up journal</string>
+    <string name="backup_success">Backup sucessful</string>
+    <string name="backup_fail">Unable to complete backup</string>
     <string-array name="color_array">
         <item>red</item>
         <item>blue</item>
