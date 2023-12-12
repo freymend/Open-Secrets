@@ -22,9 +22,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.i("MainActivity", filesDir.toString())
 
-        if ((this.application as SecretApp).optionManager.getUsername() == null ||
-            (this.application as SecretApp).optionManager.getPassword() == null
-        ) {
+        if ((this.application as SecretApp).optionManager.getUsername() == null || (this.application as SecretApp).optionManager.getPassword() == null) {
             startActivity(Intent(this, LoginActivity::class.java))
         } else {
 
@@ -38,8 +36,7 @@ class MainActivity : AppCompatActivity() {
              * start a new activity. Just a guess, tho.
              */
             this.supportFragmentManager.setFragmentResultListener(
-                "delete_event",
-                this
+                "delete_event", this
             ) { _, bundle ->
 
                 val result = bundle.getString("delete_event").toBoolean()
@@ -55,8 +52,7 @@ class MainActivity : AppCompatActivity() {
             binding.searchButton.setOnClickListener {
                 startActivity(
                     Intent(
-                        this,
-                        SearchActivity::class.java
+                        this, SearchActivity::class.java
                     ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                 )
@@ -64,8 +60,7 @@ class MainActivity : AppCompatActivity() {
             binding.addButton.setOnClickListener {
                 startActivity(
                     Intent(
-                        this,
-                        EntryTextActivity::class.java
+                        this, EntryTextActivity::class.java
                     ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                 )
@@ -73,8 +68,7 @@ class MainActivity : AppCompatActivity() {
             binding.optionButton.setOnClickListener {
                 startActivity(
                     Intent(
-                        this,
-                        OptionActivity::class.java
+                        this, OptionActivity::class.java
                     ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                 )
@@ -100,7 +94,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }.start()
-
         }
     }
 
@@ -138,8 +131,7 @@ class MainActivity : AppCompatActivity() {
         args.putInt("pos", pos)
         dialog.arguments = args
         dialog.show(
-            this.supportFragmentManager,
-            "delete_entry"
+            this.supportFragmentManager, "delete_entry"
         )
     }
 
@@ -161,19 +153,16 @@ class MainActivity : AppCompatActivity() {
                         if (pos != null) {
                             if (deleteFn(pos)) {
                                 it.supportFragmentManager.setFragmentResult(
-                                    "delete_event",
-                                    bundleOf("delete_event" to "true")
+                                    "delete_event", bundleOf("delete_event" to "true")
                                 )
                             } else {
                                 it.supportFragmentManager.setFragmentResult(
-                                    "delete_event",
-                                    bundleOf("delete_event" to "false")
+                                    "delete_event", bundleOf("delete_event" to "false")
                                 )
                             }
 
                         }
-                    }
-                    .setNegativeButton("No") { _, _ ->
+                    }.setNegativeButton("No") { _, _ ->
                         // User cancelled the dialog.
                     }
                 // Create the AlertDialog object and return it.
