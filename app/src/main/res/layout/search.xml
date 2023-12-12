@@ -10,7 +10,7 @@
         android:id="@+id/colored_bar"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="?attr/colorPrimary"
+        style="@style/Theme.OpenSecrets.TitleBar"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -31,7 +31,7 @@
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="?attr/colorPrimary"
+        style="@style/Theme.OpenSecrets.NavBar"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintBottom_toBottomOf="parent"
