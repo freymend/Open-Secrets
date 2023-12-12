@@ -22,11 +22,13 @@ class LoginActivity : AppCompatActivity() {
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
 
+        val isFilled = { username.text.isNotEmpty() && password.text.isNotEmpty() }
+
         username.addTextChangedListener {
-            login.isEnabled = username.text.isNotEmpty() && password.text.isNotEmpty()
+            login.isEnabled = isFilled()
         }
         password.addTextChangedListener {
-            login.isEnabled = username.text.isNotEmpty() && password.text.isNotEmpty()
+            login.isEnabled = isFilled()
         }
 
         findViewById<Button>(R.id.sign_up).setOnClickListener {
@@ -35,8 +37,7 @@ class LoginActivity : AppCompatActivity() {
         login.setOnClickListener {
             Thread {
                 val response = Request.post(
-                    "https://not-open-secrets.fly.dev/login",
-                    """{
+                    "https://not-open-secrets.fly.dev/login", """{
                         "username": "${username.text}",
                         "password": "${password.text}"
                     }""".trimIndent()
@@ -48,8 +49,7 @@ class LoginActivity : AppCompatActivity() {
                         (this.application as SecretApp).optionManager.updatePassword(password.text.toString())
                         startActivity(
                             Intent(
-                                this,
-                                MainActivity::class.java
+                                this, MainActivity::class.java
                             ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         )
                     } else {
