@@ -50,7 +50,6 @@ class SignUpActivity : AppCompatActivity() {
 
                 runOnUiThread {
                     if (response.getBoolean("registered")) {
-//                        TODO: put home screen here
                         startActivity(
                             Intent(
                                 this, LoginActivity::class.java
