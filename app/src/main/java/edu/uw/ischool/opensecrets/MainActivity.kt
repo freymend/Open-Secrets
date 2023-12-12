@@ -99,22 +99,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        Toast.makeText(this, getString(R.string.backing_up_journal), Toast.LENGTH_SHORT).show()
-
         val username = (this.application as SecretApp).optionManager.getUsername()
         if (!username.isNullOrEmpty()) {
             Thread {
-                val status = (this.application as SecretApp).journalManager.backupJournal(username)
-
-                runOnUiThread {
-                    if (status) {
-                        Toast.makeText(this, getString(R.string.backup_success), Toast.LENGTH_SHORT)
-                            .show()
-                    } else {
-                        Toast.makeText(this, getString(R.string.backup_fail), Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
+                (this.application as SecretApp).journalManager.backupJournal(username)
             }.start()
         }
     }
