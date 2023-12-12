@@ -21,21 +21,23 @@ class SignUpActivity : AppCompatActivity() {
         val password = findViewById<EditText>(R.id.password)
         val verifyPassword = findViewById<EditText>(R.id.verify_password)
 
+        val isFilled =
+            { username.text.isNotEmpty() && password.text.isNotEmpty() && verifyPassword.text.isNotEmpty() }
+
         username.addTextChangedListener {
-            signUp.isEnabled =
-                username.text.isNotEmpty() && password.text.isNotEmpty() && verifyPassword.text.isNotEmpty()
+            signUp.isEnabled = isFilled()
         }
         password.addTextChangedListener {
-            signUp.isEnabled =
-                username.text.isNotEmpty() && password.text.isNotEmpty() && verifyPassword.text.isNotEmpty()
+            signUp.isEnabled = isFilled()
         }
         verifyPassword.addTextChangedListener {
-            signUp.isEnabled =
-                username.text.isNotEmpty() && password.text.isNotEmpty() && verifyPassword.text.isNotEmpty()
+            signUp.isEnabled = isFilled()
         }
 
+        val passwordIsVerified = { password.text.toString() == verifyPassword.text.toString() }
+
         signUp.setOnClickListener {
-            if (password.text.toString() != verifyPassword.text.toString()) {
+            if (passwordIsVerified()) {
                 Toast.makeText(this, getString(R.string.check_password), Toast.LENGTH_SHORT).show()
             }
             Thread {
