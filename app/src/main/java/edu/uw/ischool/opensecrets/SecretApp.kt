@@ -82,6 +82,12 @@ class SecretApp : Application() {
     fun queueSendEntry(entry : Entry){
         messageQueue.queueSendEntry(entry, 1.toLong())
     }
+    fun queueEntryFromPos(pos : Int){
+        val oldEntry : Entry? = journalManager.getEntryAt(pos)
+        if(oldEntry != null){
+            queueSendEntry(oldEntry)
+        }
+    }
     private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is not in the Support Library.

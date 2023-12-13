@@ -10,6 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import edu.uw.ischool.opensecrets.adapter.EntryAdapter
 import edu.uw.ischool.opensecrets.databinding.ActivityHomeBinding
+import edu.uw.ischool.opensecrets.model.Entry
 
 
 class HomeActivity : AppCompatActivity() {
@@ -96,7 +97,8 @@ class HomeActivity : AppCompatActivity() {
      */
     private fun deleteEntry(pos: Int) {
         val dialog =
-            DeleteEntryDialogFragment((this.application as SecretApp).journalManager::deleteEntry)
+            DeleteEntryDialogFragment((this.application as SecretApp).journalManager::deleteEntry,
+                (this.application as SecretApp)::queueEntryFromPos)
         val args = Bundle()
         args.putInt("pos", pos)
         dialog.arguments = args
@@ -111,7 +113,7 @@ class HomeActivity : AppCompatActivity() {
      * @param deleteFn The callback function to be call if user select "Yes" when prompted
      */
     class DeleteEntryDialogFragment(
-        val deleteFn: (Int) -> Boolean
+        val deleteFn: (Int) -> Boolean, val sendEntry: (Int) -> Unit
     ) : DialogFragment() {
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             return activity?.let {
@@ -121,6 +123,7 @@ class HomeActivity : AppCompatActivity() {
                     .setPositiveButton("Yes") { _, _ ->
                         val pos = arguments?.getInt("pos")
                         if (pos != null) {
+                            sendEntry(pos)
                             if (deleteFn(pos)) {
                                 it.supportFragmentManager.setFragmentResult(
                                     "delete_event", bundleOf("delete_event" to "true")
