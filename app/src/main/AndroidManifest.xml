@@ -30,6 +30,7 @@
         <activity android:name=".EntryOverviewEditActivity" />
         <activity android:name=".EntryTextActivity" />
         <activity android:name=".SearchActivity" />
+        <activity android:name=".HomeActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

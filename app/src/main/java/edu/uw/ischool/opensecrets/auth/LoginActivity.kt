@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import edu.uw.ischool.opensecrets.HomeActivity
 import edu.uw.ischool.opensecrets.MainActivity
 import edu.uw.ischool.opensecrets.R
 import edu.uw.ischool.opensecrets.SecretApp
@@ -49,7 +50,7 @@ class LoginActivity : AppCompatActivity() {
                         (this.application as SecretApp).optionManager.updatePassword(password.text.toString())
                         startActivity(
                             Intent(
-                                this, MainActivity::class.java
+                                this, HomeActivity::class.java
                             ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         )
                     } else {
