@@ -4,7 +4,22 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
-    <style name="Theme.OpenSecrets" parent="Base.Theme.OpenSecrets" />
+    <style name="Theme.OpenSecrets" parent="Base.Theme.OpenSecrets">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:toolbarStyle">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.OpenSecrets.NavBar" parent="Theme.OpenSecrets">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.OpenSecrets.TitleBar" parent="Theme.OpenSecrets">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 
 
 </resources>
