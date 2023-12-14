@@ -2,20 +2,22 @@ package edu.uw.ischool.opensecrets
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
 import edu.uw.ischool.opensecrets.databinding.EntryOverviewBinding
 import edu.uw.ischool.opensecrets.model.Entry
 import java.util.Calendar
 
 
-class EntryOverviewEditActivity : AppCompatActivity() {
+class EntryOverviewEditActivity : Fragment() {
 
-    private lateinit var binding: EntryOverviewBinding
+    private var _binding: EntryOverviewBinding? = null
+    private val binding get() = _binding!!
 
     companion object {
         const val ENTRY = "entry"
@@ -25,58 +27,13 @@ class EntryOverviewEditActivity : AppCompatActivity() {
         const val COLOR = "color"
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = EntryOverviewBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = EntryOverviewBinding.inflate(inflater, container, false)
         val colors = resources.getStringArray(R.array.color_array)
-
-        binding.bottomNavigation.selectedItemId = R.id.add
-        binding.bottomNavigation.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.home -> {
-                    startActivity(
-                        Intent(
-                            this,
-                            HomeActivity::class.java
-                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    )
-                    true
-                }
-
-                R.id.search -> {
-                    startActivity(
-                        Intent(
-                            this,
-                            SearchActivity::class.java
-                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    )
-                    true
-                }
-
-                R.id.add -> {
-                    startActivity(
-                        Intent(
-                            this,
-                            EntryTextActivity::class.java
-                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    )
-                    true
-                }
-
-                R.id.option -> {
-                    startActivity(
-                        Intent(
-                            this,
-                            OptionActivity::class.java
-                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    )
-                    true
-                }
-
-                else -> false
-            }
-        }
 
         binding.colorSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -112,42 +69,36 @@ class EntryOverviewEditActivity : AppCompatActivity() {
             }
         }
 
-        val updateCheck = this.intent?.extras?.getString(UPDATE).toBoolean()
+        val updateCheck = activity?.intent?.extras?.getString(UPDATE).toBoolean()
         if (updateCheck) {
             // setUpdateListener
             // hide save button
             // show edit button
             binding.entryEditButton.visibility = View.VISIBLE
             binding.entrySaveButton.visibility = View.GONE
-            val colorExtra = intent?.extras?.getString(COLOR).toString()
+            val colorExtra = activity?.intent?.extras?.getString(COLOR).toString()
             binding.colorSpinner.setSelection(colors.asList().indexOf(colorExtra))
-            val titleExtra = intent?.extras?.getString(TITLE).toString()
+            val titleExtra = activity?.intent?.extras?.getString(TITLE).toString()
             binding.entryTitle.setText(titleExtra)
             binding.entryEditButton.setOnClickListener {
                 if (binding.entryTitle.text.isEmpty()) {
-                    Toast.makeText(this, "Title should not be empty", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Title should not be empty", Toast.LENGTH_SHORT).show()
                 } else {
-                    val pos = intent?.extras?.getString(POSITION).toString().toInt()
-                    val status = (this.application as SecretApp).journalManager.updateEntry(
+                    val pos = activity?.intent?.extras?.getString(POSITION).toString().toInt()
+                    val status = (activity?.application as SecretApp).journalManager.updateEntry(
                         pos,
                         Entry(
                             binding.entryTitle.text.toString(),
                             binding.colorSpinner.selectedItem as String,
-                            intent?.extras?.getString(ENTRY).toString(),
+                            activity?.intent?.extras?.getString(ENTRY).toString(),
                             Calendar.getInstance().time
                         )
                     )
 
                     if (status) {
-                        startActivity(
-                            Intent(
-                                this,
-                                MainActivity::class.java
-                            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                        )
+                        parentFragmentManager.setFragmentResult("entry_edit", Bundle.EMPTY)
                     } else {
-                        Toast.makeText(this, "Failed to write data", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Failed to write data", Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -156,30 +107,31 @@ class EntryOverviewEditActivity : AppCompatActivity() {
             binding.entrySaveButton.visibility = View.VISIBLE
             binding.entrySaveButton.setOnClickListener {
                 if (binding.entryTitle.text.isEmpty()) {
-                    Toast.makeText(this, "Title should not be empty", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Title should not be empty", Toast.LENGTH_SHORT).show()
                 } else {
-                    val status = (this.application as SecretApp).journalManager.appendEntry(
+                    val status = (activity?.application as SecretApp).journalManager.appendEntry(
                         Entry(
                             binding.entryTitle.text.toString(),
                             binding.colorSpinner.selectedItem as String,
-                            intent?.extras?.getString(ENTRY).toString(),
+                            activity?.intent?.extras?.getString(ENTRY).toString(),
                             Calendar.getInstance().time
                         )
                     )
 
                     if (status) {
-                        startActivity(
-                            Intent(
-                                this,
-                                MainActivity::class.java
-                            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                        )
+                        parentFragmentManager.setFragmentResult("entry_edit", Bundle.EMPTY)
                     } else {
-                        Toast.makeText(this, "Failed to write data", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Failed to write data", Toast.LENGTH_LONG).show()
                     }
                 }
             }
         }
+
+        return binding.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

@@ -27,11 +27,8 @@
         android:theme="@style/Theme.OpenSecrets"
         android:enableOnBackInvokedCallback="true"
         tools:targetApi="31">
-        <activity android:name=".OptionActivity" />
-        <activity android:name=".EntryOverviewEditActivity" />
-        <activity android:name=".EntryTextActivity" />
-        <activity android:name=".SearchActivity" />
         <activity android:name=".HomeActivity" />
+        <activity android:name=".EntryOverviewEditActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

@@ -2,14 +2,19 @@ package edu.uw.ischool.opensecrets
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import edu.uw.ischool.opensecrets.databinding.EntryTextBinding
 
 
-class EntryTextActivity : AppCompatActivity() {
+class EntryTextActivity : Fragment() {
 
-    private lateinit var binding: EntryTextBinding
+    private var _binding: EntryTextBinding? = null
+    private val binding get() = _binding!!
 
     companion object {
         const val EDIT = "edit"
@@ -19,75 +24,47 @@ class EntryTextActivity : AppCompatActivity() {
         const val COLOR = "color"
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         super.onCreate(savedInstanceState)
-        binding = EntryTextBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        val updateCheck = this.intent?.extras?.getString(EDIT)
+        _binding = EntryTextBinding.inflate(inflater, container, false)
+
+        val updateCheck = activity?.intent?.extras?.getString(EDIT)
         if (updateCheck.toBoolean()) {
-            binding.entry.setText(intent?.extras?.getString(TEXT).toString())
+            binding.entry.setText(activity?.intent?.extras?.getString(TEXT).toString())
         }
         binding.overview.setOnClickListener {
             if (binding.entry.text.isNotEmpty()) {
-                val intent = Intent(
-                    this,
-                    EntryOverviewEditActivity::class.java
-                ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                intent.putExtra(EntryOverviewEditActivity.ENTRY, binding.entry.text.toString())
+                var bundle = bundleOf(EntryOverviewEditActivity.ENTRY to binding.entry.text.toString())
                 if (updateCheck.toBoolean()) {
-                    intent.putExtra(EntryOverviewEditActivity.UPDATE, "true")
-                    val pos = this.intent?.extras?.getString(INDEX).toString()
-                    intent.putExtra(EntryOverviewEditActivity.POSITION, pos)
-                    val titleValue = this.intent?.extras?.getString(TITLE).toString()
-                    intent.putExtra(EntryOverviewEditActivity.TITLE, titleValue)
-                    val colorValue = this.intent?.extras?.getString(COLOR).toString()
-                    intent.putExtra(EntryOverviewEditActivity.COLOR, colorValue)
+                    val pos = activity?.intent?.extras?.getString(INDEX).toString()
+                    val titleValue = activity?.intent?.extras?.getString(TITLE).toString()
+                    val colorValue = activity?.intent?.extras?.getString(COLOR).toString()
+                    bundle = bundleOf(
+                        EntryOverviewEditActivity.ENTRY to binding.entry.text.toString(),
+                        EntryOverviewEditActivity.UPDATE to "true",
+                        EntryOverviewEditActivity.POSITION to pos,
+                        EntryOverviewEditActivity.TITLE to titleValue,
+                        EntryOverviewEditActivity.COLOR to colorValue
+                    )
                 }
-                startActivity(
-                    intent
-                )
+                parentFragmentManager.setFragmentResult("entry_create", bundle)
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, EntryOverviewEditActivity())
+                    .commit()
             } else {
-                Toast.makeText(this, "Secret should not be empty...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Secret should not be empty...", Toast.LENGTH_SHORT).show()
             }
         }
 
-        binding.bottomNavigation.selectedItemId = R.id.add
-        binding.bottomNavigation.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.home -> {
-                    startActivity(
-                        Intent(
-                            this, HomeActivity::class.java
-                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    )
-                    true
-                }
+        return binding.root
+    }
 
-                R.id.search -> {
-                    startActivity(
-                        Intent(
-                            this, SearchActivity::class.java
-                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    )
-                    true
-                }
-
-                R.id.add -> {
-                    true
-                }
-
-                R.id.option -> {
-                    startActivity(
-                        Intent(
-                            this, OptionActivity::class.java
-                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    )
-                    true
-                }
-
-                else -> false
-            }
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
