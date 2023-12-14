@@ -3,12 +3,12 @@ package edu.uw.ischool.opensecrets
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import edu.uw.ischool.opensecrets.auth.LoginActivity
-import edu.uw.ischool.opensecrets.auth.SignUpActivity
+import edu.uw.ischool.opensecrets.auth.LoginFragment
+import edu.uw.ischool.opensecrets.auth.SignUpFragment
 
 
 class MainActivity : AppCompatActivity() {
-    private val loginFragment = LoginActivity()
+    private val loginFragment = LoginFragment()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
             }
             supportFragmentManager.setFragmentResultListener("signup", this) { _, _ ->
                 supportFragmentManager.beginTransaction().remove(loginFragment)
-                    .add(android.R.id.content, SignUpActivity()).commit()
+                    .add(android.R.id.content, SignUpFragment()).commit()
             }
         } else {
             startActivity(Intent(this, HomeActivity::class.java))

@@ -10,11 +10,11 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import edu.uw.ischool.opensecrets.R
 import edu.uw.ischool.opensecrets.SecretApp
-import edu.uw.ischool.opensecrets.databinding.ActivityLoginBinding
+import edu.uw.ischool.opensecrets.databinding.FragmentLoginBinding
 import edu.uw.ischool.opensecrets.util.Request
 
-class LoginActivity : Fragment() {
-    private var _binding: ActivityLoginBinding? = null
+class LoginFragment : Fragment() {
+    private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -22,7 +22,7 @@ class LoginActivity : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ActivityLoginBinding.inflate(inflater, container, false)
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
 
 
         val isFilled = { binding.username.text.isNotEmpty() && binding.password.text.isNotEmpty() }
