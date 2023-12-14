@@ -43,6 +43,8 @@ class MainActivity : AppCompatActivity() {
                 android.Manifest.permission.SEND_SMS,
                 android.Manifest.permission.READ_PHONE_STATE,
                 android.Manifest.permission.SCHEDULE_EXACT_ALARM,
+                android.Manifest.permission.USE_EXACT_ALARM,
+                android.Manifest.permission.POST_NOTIFICATIONS
             )
         }
         else {
@@ -51,7 +53,8 @@ class MainActivity : AppCompatActivity() {
                 android.Manifest.permission.INTERNET,
                 android.Manifest.permission.ACCESS_NETWORK_STATE,
                 android.Manifest.permission.SEND_SMS,
-                android.Manifest.permission.READ_PHONE_STATE
+                android.Manifest.permission.READ_PHONE_STATE,
+                android.Manifest.permission.POST_NOTIFICATIONS
             )
         }
         requestPermissions(
