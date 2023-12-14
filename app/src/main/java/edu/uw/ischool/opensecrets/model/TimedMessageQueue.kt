@@ -7,7 +7,9 @@ import android.content.Context
 import android.content.Context.ALARM_SERVICE
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import android.os.SystemClock
+import android.util.Log
 import java.lang.System.currentTimeMillis
 import java.time.Instant
 
@@ -16,8 +18,10 @@ class TimedMessageQueue(val context : Context, val alarmManager: AlarmManager, v
     val queuedEntries : ArrayList<Entry> = ArrayList<Entry>()
 //    val queuedPendings : ArrayList<PendingIntent> = ArrayList<PendingIntent>()
     var receiver : BroadcastReceiver? = null
+    var requestCode : Int = 0
 
     fun queueSendEntry(entry : Entry, minutesToSend : Long){
+        requestCode += 1
         if(receiver == null){
             receiver = object : BroadcastReceiver() {
                 override fun onReceive(context: Context?, intent: Intent?) {
@@ -30,14 +34,18 @@ class TimedMessageQueue(val context : Context, val alarmManager: AlarmManager, v
         }
         val intent = Intent(ALARM_ACTION)
 
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_IMMUTABLE)
 //        queuedPendings.add(pendingIntent)
         queuedEntries.add(entry)
-
-        // Get the Alarm Manager
-        alarmManager.set(AlarmManager.RTC_WAKEUP,
-            System.currentTimeMillis() + 60000 * minutesToSend,
-            pendingIntent)
+        if(Build.VERSION.SDK_INT < 31 || alarmManager.canScheduleExactAlarms()){
+            Log.i("TimedMessageQueue", "sending entry ${entry.title} in $minutesToSend minutes")
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP,
+                System.currentTimeMillis() + 60000 * minutesToSend,
+                pendingIntent)
+        }
+        else{
+            Log.i("TimedMessageQueue", "Message Queue failed you, sorry")
+        }
     }
     fun sendNextEntryInQueue(){
 //        if(queuedPendings.size > 0){

@@ -33,6 +33,7 @@ class SecretApp : Application() {
     lateinit var optionManager: OptionManager
     override fun onCreate() {
         super.onCreate()
+        Log.i("SecretApp", "Build version: ${Build.VERSION.SDK_INT}")
     }
 
     fun loadRepository() {
@@ -66,7 +67,7 @@ class SecretApp : Application() {
             .setSmallIcon(R.drawable.round_home_24)
             .setContentTitle(title)
             .setContentText(textContent)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         with(NotificationManagerCompat.from(context)) {
             if (ActivityCompat.checkSelfPermission(
@@ -80,7 +81,9 @@ class SecretApp : Application() {
         }
     }
     fun queueSendEntry(entry : Entry){
-        messageQueue.queueSendEntry(entry, 1.toLong())
+        val time : Long = optionManager.getMinTime().toLong()
+        Log.i("SecretApp", "Time to send message: $time")
+        messageQueue.queueSendEntry(entry, time)
     }
     fun queueEntryFromPos(pos : Int){
         val oldEntry : Entry? = journalManager.getEntryAt(pos)
@@ -94,7 +97,7 @@ class SecretApp : Application() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "opensecretname"
             val descriptionText = "notif channel for our journaling app"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                 description = descriptionText
             }

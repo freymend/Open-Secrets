@@ -1,6 +1,7 @@
 package edu.uw.ischool.opensecrets
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import edu.uw.ischool.opensecrets.auth.LoginActivity
@@ -21,14 +22,29 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun requestPermission() {
-        requestPermissions(
-            arrayOf(
+        var permissions : Array<String>
+        if(Build.VERSION.SDK_INT >= 31){
+            permissions = arrayOf(
                 android.Manifest.permission.READ_CONTACTS,
                 android.Manifest.permission.INTERNET,
                 android.Manifest.permission.ACCESS_NETWORK_STATE,
                 android.Manifest.permission.SEND_SMS,
                 android.Manifest.permission.READ_PHONE_STATE,
-            ), 0
+                android.Manifest.permission.SCHEDULE_EXACT_ALARM,
+                android.Manifest.permission.USE_EXACT_ALARM
+            )
+        }
+        else {
+            permissions = arrayOf(
+                android.Manifest.permission.READ_CONTACTS,
+                android.Manifest.permission.INTERNET,
+                android.Manifest.permission.ACCESS_NETWORK_STATE,
+                android.Manifest.permission.SEND_SMS,
+                android.Manifest.permission.READ_PHONE_STATE
+            )
+        }
+        requestPermissions(
+            permissions, 0
         )
     }
 }
