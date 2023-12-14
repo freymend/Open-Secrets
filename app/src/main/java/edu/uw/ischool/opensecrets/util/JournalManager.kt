@@ -194,4 +194,28 @@ class JournalManager(private val context: Context) {
             Toast.makeText(context, "data not the same", Toast.LENGTH_SHORT).show()
         }
     }
+    fun getEntryAt(pos : Int) : Entry? {
+        if (journalExist()) {
+            val data: JSONArray = loadData()
+            if(pos >= 0 && data.length() > pos){
+                val value : JSONObject = data.getJSONObject(pos)
+                return createEntryFromJSONObject(value)
+            }
+        }
+        return null
+    }
+    private fun createEntryFromJSONObject(jsonObject : JSONObject) : Entry {
+        val title = jsonObject.getString("title")
+        val text = jsonObject.getString("text")
+        val color = jsonObject.getString("color")
+        val dateCreatedString = jsonObject.getString("dateCreated")
+        val dateFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy")
+        val dateCreated = dateFormat.parse(dateCreatedString)
+        return Entry(
+                title = title,
+                text = text,
+                color = color,
+                dateCreated = dateCreated
+            )
+    }
 }

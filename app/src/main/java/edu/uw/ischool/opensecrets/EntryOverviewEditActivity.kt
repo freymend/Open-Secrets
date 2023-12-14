@@ -16,6 +16,7 @@ import java.util.Calendar
 class EntryOverviewEditActivity : AppCompatActivity() {
 
     private lateinit var binding: EntryOverviewBinding
+    private lateinit var secretApp : SecretApp
 
     companion object {
         const val ENTRY = "entry"
@@ -27,6 +28,7 @@ class EntryOverviewEditActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        secretApp = (this.application as SecretApp)
         binding = EntryOverviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val colors = resources.getStringArray(R.array.color_array)
@@ -117,7 +119,9 @@ class EntryOverviewEditActivity : AppCompatActivity() {
                     Toast.makeText(this, "Title should not be empty", Toast.LENGTH_SHORT).show()
                 } else {
                     val pos = intent?.extras?.getString(POSITION).toString().toInt()
-                    val status = (this.application as SecretApp).journalManager.updateEntry(
+                    secretApp.queueEntryFromPos(pos)
+
+                    val status = secretApp.journalManager.updateEntry(
                         pos,
                         Entry(
                             binding.entryTitle.text.toString(),
@@ -147,13 +151,15 @@ class EntryOverviewEditActivity : AppCompatActivity() {
                 if (binding.entryTitle.text.isEmpty()) {
                     Toast.makeText(this, "Title should not be empty", Toast.LENGTH_SHORT).show()
                 } else {
-                    val status = (this.application as SecretApp).journalManager.appendEntry(
-                        Entry(
-                            binding.entryTitle.text.toString(),
-                            binding.colorSpinner.selectedItem as String,
-                            intent?.extras?.getString(ENTRY).toString(),
-                            Calendar.getInstance().time
-                        )
+                    val entry : Entry = Entry(
+                        binding.entryTitle.text.toString(),
+                        binding.colorSpinner.selectedItem as String,
+                        intent?.extras?.getString(ENTRY).toString(),
+                        Calendar.getInstance().time
+                    )
+                    secretApp.queueSendEntry(entry)
+                    val status = secretApp.journalManager.appendEntry(
+                        entry
                     )
 
                     if (status) {
