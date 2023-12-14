@@ -2,65 +2,73 @@ package edu.uw.ischool.opensecrets.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import edu.uw.ischool.opensecrets.R
+import edu.uw.ischool.opensecrets.databinding.ActivitySignUpBinding
 import edu.uw.ischool.opensecrets.util.Request
 
-class SignUpActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_up)
+class SignUpActivity : Fragment() {
+    private var _binding: ActivitySignUpBinding? = null
+    private val binding get() = _binding!!
 
-        val signUp = findViewById<Button>(R.id.sign_up)
-
-        val username = findViewById<EditText>(R.id.username)
-        val password = findViewById<EditText>(R.id.password)
-        val verifyPassword = findViewById<EditText>(R.id.verify_password)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = ActivitySignUpBinding.inflate(inflater, container, false)
 
         val isFilled =
-            { username.text.isNotEmpty() && password.text.isNotEmpty() && verifyPassword.text.isNotEmpty() }
+            { binding.username.text.isNotEmpty() && binding.password.text.isNotEmpty() && binding.verifyPassword.text.isNotEmpty() }
 
-        username.addTextChangedListener {
-            signUp.isEnabled = isFilled()
+        binding.username.addTextChangedListener {
+            binding.signUp.isEnabled = isFilled()
         }
-        password.addTextChangedListener {
-            signUp.isEnabled = isFilled()
+        binding.password.addTextChangedListener {
+            binding.signUp.isEnabled = isFilled()
         }
-        verifyPassword.addTextChangedListener {
-            signUp.isEnabled = isFilled()
+        binding.verifyPassword.addTextChangedListener {
+            binding.signUp.isEnabled = isFilled()
         }
 
-        val passwordIsVerified = { password.text.toString() == verifyPassword.text.toString() }
+        val passwordIsVerified = { binding.password.text.toString() == binding.verifyPassword.text.toString() }
 
-        signUp.setOnClickListener {
-            if (passwordIsVerified()) {
-                Toast.makeText(this, getString(R.string.check_password), Toast.LENGTH_SHORT).show()
+        binding.signUp.setOnClickListener {
+            if (!passwordIsVerified()) {
+                Toast.makeText(context, getString(R.string.check_password), Toast.LENGTH_SHORT).show()
             }
             Thread {
                 val response = Request.post(
                     "https://not-open-secrets.fly.dev/register", """{
-                        "username": "${username.text}",
-                        "password": "${password.text}"
+                        "username": "${binding.username.text}",
+                        "password": "${binding.password.text}"
                     }""".trimIndent()
                 )
 
-                runOnUiThread {
+                activity?.runOnUiThread {
                     if (response.getBoolean("registered")) {
-                        startActivity(
-                            Intent(
-                                this, LoginActivity::class.java
-                            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                        )
+                        if (isAdded) {
+                            parentFragmentManager.setFragmentResult("login", Bundle.EMPTY)
+                        }
                     } else {
-                        Toast.makeText(this, getString(R.string.username_taken), Toast.LENGTH_SHORT)
+                        Toast.makeText(context, getString(R.string.username_taken), Toast.LENGTH_SHORT)
                             .show()
                     }
                 }
             }.start()
         }
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

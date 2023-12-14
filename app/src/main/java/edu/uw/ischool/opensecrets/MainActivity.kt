@@ -4,9 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import edu.uw.ischool.opensecrets.auth.LoginActivity
+import edu.uw.ischool.opensecrets.auth.SignUpActivity
 
 
 class MainActivity : AppCompatActivity() {
+    private val loginFragment = LoginActivity()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -14,7 +16,15 @@ class MainActivity : AppCompatActivity() {
         (this.application as SecretApp).loadRepository()
 
         if ((this.application as SecretApp).optionManager.getUsername() == null || (this.application as SecretApp).optionManager.getPassword() == null) {
-            startActivity(Intent(this, LoginActivity::class.java))
+            supportFragmentManager.beginTransaction().add(android.R.id.content, loginFragment)
+                .commit()
+            supportFragmentManager.setFragmentResultListener("login", this) { _, _ ->
+                startActivity(Intent(this, HomeActivity::class.java))
+            }
+            supportFragmentManager.setFragmentResultListener("signup", this) { _, _ ->
+                supportFragmentManager.beginTransaction().remove(loginFragment)
+                    .add(android.R.id.content, SignUpActivity()).commit()
+            }
         } else {
             startActivity(Intent(this, HomeActivity::class.java))
         }

@@ -1,64 +1,76 @@
 package edu.uw.ischool.opensecrets.auth
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import edu.uw.ischool.opensecrets.HomeActivity
-import edu.uw.ischool.opensecrets.MainActivity
+import androidx.fragment.app.Fragment
 import edu.uw.ischool.opensecrets.R
 import edu.uw.ischool.opensecrets.SecretApp
+import edu.uw.ischool.opensecrets.databinding.ActivityLoginBinding
 import edu.uw.ischool.opensecrets.util.Request
 
-class LoginActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+class LoginActivity : Fragment() {
+    private var _binding: ActivityLoginBinding? = null
+    private val binding get() = _binding!!
 
-        val login = findViewById<Button>(R.id.login)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = ActivityLoginBinding.inflate(inflater, container, false)
 
-        val username = findViewById<EditText>(R.id.username)
-        val password = findViewById<EditText>(R.id.password)
 
-        val isFilled = { username.text.isNotEmpty() && password.text.isNotEmpty() }
+        val isFilled = { binding.username.text.isNotEmpty() && binding.password.text.isNotEmpty() }
 
-        username.addTextChangedListener {
-            login.isEnabled = isFilled()
+        binding.username.addTextChangedListener {
+            Log.d("LoginActivity", "username changed")
+            Log.d("LoginActivity", isFilled().toString())
+            binding.login.isEnabled = isFilled()
         }
-        password.addTextChangedListener {
-            login.isEnabled = isFilled()
+        binding.password.addTextChangedListener {
+            Log.d("LoginActivity", "password changed")
+            Log.d("LoginActivity", isFilled().toString())
+            binding.login.isEnabled = isFilled()
         }
 
-        findViewById<Button>(R.id.sign_up).setOnClickListener {
-            startActivity(Intent(this, SignUpActivity::class.java))
+        binding.signUp.setOnClickListener {
+            if (isAdded) {
+                parentFragmentManager.setFragmentResult("signup", Bundle.EMPTY)
+            }
         }
-        login.setOnClickListener {
+        binding.login.setOnClickListener {
             Thread {
                 val response = Request.post(
                     "https://not-open-secrets.fly.dev/login", """{
-                        "username": "${username.text}",
-                        "password": "${password.text}"
+                        "username": "${binding.username.text}",
+                        "password": "${binding.password.text}"
                     }""".trimIndent()
                 )
 
-                runOnUiThread {
+                activity?.runOnUiThread {
                     if (response.getBoolean("authenticated")) {
-                        (this.application as SecretApp).optionManager.updateUsername(username.text.toString())
-                        (this.application as SecretApp).optionManager.updatePassword(password.text.toString())
-                        startActivity(
-                            Intent(
-                                this, HomeActivity::class.java
-                            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                        )
+                        (activity?.application as SecretApp).optionManager.updateUsername(binding.username.text.toString())
+                        (activity?.application as SecretApp).optionManager.updatePassword(binding.password.text.toString())
+                        if (isAdded) {
+                            parentFragmentManager.setFragmentResult("login", Bundle.EMPTY)
+                        }
                     } else {
-                        Toast.makeText(this, getString(R.string.login_failed), Toast.LENGTH_SHORT)
+                        Toast.makeText(context, getString(R.string.login_failed), Toast.LENGTH_SHORT)
                             .show()
                     }
                 }
             }.start()
         }
+        return binding.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

@@ -25,6 +25,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.OpenSecrets"
+        android:enableOnBackInvokedCallback="true"
         tools:targetApi="31">
         <activity android:name=".OptionActivity" />
         <activity android:name=".EntryOverviewEditActivity" />
@@ -40,8 +41,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".auth.LoginActivity" />
-        <activity android:name=".auth.SignUpActivity" />
         <receiver android:name=".SecretApp" android:exported="true">
             <intent-filter>
                 <action android:name="ON_ALARM_NOTIFY" />
