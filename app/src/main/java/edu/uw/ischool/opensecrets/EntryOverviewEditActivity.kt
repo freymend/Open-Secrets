@@ -135,7 +135,7 @@ class EntryOverviewEditActivity : AppCompatActivity() {
                         startActivity(
                             Intent(
                                 this,
-                                MainActivity::class.java
+                                HomeActivity::class.java
                             ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                                 .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                         )
@@ -166,7 +166,7 @@ class EntryOverviewEditActivity : AppCompatActivity() {
                         startActivity(
                             Intent(
                                 this,
-                                MainActivity::class.java
+                                HomeActivity::class.java
                             ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                                 .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                         )
