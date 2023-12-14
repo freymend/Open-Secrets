@@ -30,41 +30,52 @@ class EntryOverviewEditActivity : AppCompatActivity() {
         binding = EntryOverviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val colors = resources.getStringArray(R.array.color_array)
-        binding.optionButton.setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    OptionActivity::class.java
-                ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            )
-        }
-        binding.homeButton.setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    HomeActivity::class.java
-                ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            )
-        }
-        binding.searchButton.setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    SearchActivity::class.java
-                ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            )
-        }
 
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.color_array,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.colorSpinner.adapter = adapter
+        binding.bottomNavigation.selectedItemId = R.id.add
+        binding.bottomNavigation.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.home -> {
+                    startActivity(
+                        Intent(
+                            this,
+                            HomeActivity::class.java
+                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    )
+                    true
+                }
+
+                R.id.search -> {
+                    startActivity(
+                        Intent(
+                            this,
+                            SearchActivity::class.java
+                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    )
+                    true
+                }
+
+                R.id.add -> {
+                    startActivity(
+                        Intent(
+                            this,
+                            EntryTextActivity::class.java
+                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    )
+                    true
+                }
+
+                R.id.option -> {
+                    startActivity(
+                        Intent(
+                            this,
+                            OptionActivity::class.java
+                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    )
+                    true
+                }
+
+                else -> false
+            }
         }
 
         binding.colorSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

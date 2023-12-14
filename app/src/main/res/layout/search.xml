@@ -26,73 +26,13 @@
             app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
 
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/my_toolbar"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        style="@style/Theme.OpenSecrets.NavBar"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:layout_height="wrap_content"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-        <LinearLayout
-            android:id="@+id/toolbarmenucontainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="4dp"
-            android:orientation="horizontal"
-            android:weightSum="4">
-
-            <ImageButton
-                android:id="@+id/home_button"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:contentDescription="@string/home_button_desc"
-                android:scaleType="fitCenter"
-                android:src="@drawable/round_home_24" />
-
-            <ImageButton
-                android:id="@+id/search_button"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:contentDescription="@string/search_button_desc"
-                android:scaleType="fitCenter"
-                android:src="@drawable/round_search_24" />
-
-            <ImageButton
-                android:id="@+id/add_button"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:contentDescription="@string/add_button_desc"
-                android:scaleType="fitCenter"
-                android:src="@drawable/round_add_24" />
-
-            <ImageButton
-                android:id="@+id/option_button"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:contentDescription="@string/option_page_navigation_button"
-                android:scaleType="fitCenter"
-                android:src="@drawable/round_settings_24" />
-
-        </LinearLayout>
-
-
-    </androidx.appcompat.widget.Toolbar>
+        app:menu="@menu/app_bar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,29 +32,43 @@ class HomeActivity : AppCompatActivity() {
         // Creating the bottom bar.
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.searchButton.setOnClickListener {
-            startActivity(
-                Intent(
-                    this, SearchActivity::class.java
-                ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            )
-        }
-        binding.addButton.setOnClickListener {
-            startActivity(
-                Intent(
-                    this, EntryTextActivity::class.java
-                ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            )
-        }
-        binding.optionButton.setOnClickListener {
-            startActivity(
-                Intent(
-                    this, OptionActivity::class.java
-                ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            )
+
+        binding.bottomNavigation.selectedItemId = R.id.home
+        binding.bottomNavigation.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.home -> {
+                    true
+                }
+
+                R.id.search -> {
+                    startActivity(
+                        Intent(
+                            this, SearchActivity::class.java
+                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    )
+                    true
+                }
+
+                R.id.add -> {
+                    startActivity(
+                        Intent(
+                            this, EntryTextActivity::class.java
+                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    )
+                    true
+                }
+
+                R.id.option -> {
+                    startActivity(
+                        Intent(
+                            this, OptionActivity::class.java
+                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    )
+                    true
+                }
+
+                else -> false
+            }
         }
         Thread {
             val username = (this.application as SecretApp).optionManager.getUsername()
