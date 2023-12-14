@@ -51,4 +51,17 @@
         <item>orange</item>
         <item>yellow</item>
     </string-array>
+    <string-array name="sort_array">
+        <item>Title</item>
+        <item>dateCreated</item>
+    </string-array>
+    <string-array name="filter_array">
+        <item>Title</item>
+        <item>Text</item>
+        <item>Color</item>
+    </string-array>
+    <string-array name="ascend_array">
+        <item>Ascending</item>
+        <item>Descending</item>
+    </string-array>
 </resources>
