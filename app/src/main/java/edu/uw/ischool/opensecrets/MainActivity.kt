@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun requestPermission() {
         var permissions : Array<String>
-        if(Build.VERSION.SDK_INT >= 31){
+        if(Build.VERSION.SDK_INT >= 33) {
             permissions = arrayOf(
                 android.Manifest.permission.READ_CONTACTS,
                 android.Manifest.permission.INTERNET,
@@ -35,6 +35,16 @@ class MainActivity : AppCompatActivity() {
                 android.Manifest.permission.POST_NOTIFICATIONS
             )
         }
+        else if(Build.VERSION.SDK_INT >= 31){
+            permissions = arrayOf(
+                android.Manifest.permission.READ_CONTACTS,
+                android.Manifest.permission.INTERNET,
+                android.Manifest.permission.ACCESS_NETWORK_STATE,
+                android.Manifest.permission.SEND_SMS,
+                android.Manifest.permission.READ_PHONE_STATE,
+                android.Manifest.permission.SCHEDULE_EXACT_ALARM,
+            )
+        }
         else {
             permissions = arrayOf(
                 android.Manifest.permission.READ_CONTACTS,
@@ -42,7 +52,6 @@ class MainActivity : AppCompatActivity() {
                 android.Manifest.permission.ACCESS_NETWORK_STATE,
                 android.Manifest.permission.SEND_SMS,
                 android.Manifest.permission.READ_PHONE_STATE,
-                android.Manifest.permission.POST_NOTIFICATIONS
             )
         }
         requestPermissions(
