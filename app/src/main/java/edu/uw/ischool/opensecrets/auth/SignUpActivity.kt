@@ -37,7 +37,7 @@ class SignUpActivity : AppCompatActivity() {
         val passwordIsVerified = { password.text.toString() == verifyPassword.text.toString() }
 
         signUp.setOnClickListener {
-            if (passwordIsVerified()) {
+            if (!passwordIsVerified()) {
                 Toast.makeText(this, getString(R.string.check_password), Toast.LENGTH_SHORT).show()
             }
             Thread {
@@ -52,7 +52,7 @@ class SignUpActivity : AppCompatActivity() {
                     if (response.getBoolean("registered")) {
                         startActivity(
                             Intent(
-                                this, LoginActivity::class.java
+                                    this, LoginActivity::class.java
                             ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         )
                     } else {
