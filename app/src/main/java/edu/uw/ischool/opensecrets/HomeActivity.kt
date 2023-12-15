@@ -4,7 +4,10 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
@@ -16,6 +19,10 @@ import edu.uw.ischool.opensecrets.model.Entry
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
+    private var allEntries : MutableList<Entry> = mutableListOf()
+    private var sortedEntries : MutableList<Entry> = mutableListOf()
+    private var entryToPos : MutableMap<Entry, Int> = mutableMapOf()
+    private var adapter : ArrayAdapter<Entry>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -65,19 +72,82 @@ class HomeActivity : AppCompatActivity() {
 
             runOnUiThread {
                 // load data.
-                val entries = (this.application as SecretApp).journalManager.loadEntry()
+                val nullEntries = (this.application as SecretApp).journalManager.loadEntry()
+                val entries : List<Entry> = nullEntries ?: mutableListOf()
 
+                Log.i("HomeActivity", "running on UI Thread")
                 // check data before loading correct view.
                 if (entries.isNullOrEmpty()) {
                     binding.entryListView.visibility = View.GONE
                     binding.noEntryItem.visibility = View.VISIBLE
+                    binding.clearSearchBtn.visibility = View.GONE
                 } else {
+                    allEntries.addAll(entries)
+                    for(i : Int in 0..<allEntries.size){
+                        entryToPos[allEntries[i]] = i
+                    }
+
+                    val intentExtras : Bundle? = intent.extras
+                    if(intentExtras != null){
+                        val sortByString : String = intentExtras.getString(SORTBY, "dateCreated")
+                        val ascending : Boolean =  intentExtras.getBoolean(ASCEND, true)
+                        val filterText : String = intentExtras.getString(FILTERTEXT, "")
+                        val filterBy : String = intentExtras.getString(FILTERBY, "title")
+
+                        val filtered : List<Entry> = applyFilter(entries, filterText, filterBy)
+                        val sorted : List<Entry> = sortEntries(filtered, sortByString, ascending)
+                        sortedEntries.addAll(sorted)
+                        binding.clearSearchBtn.visibility = View.VISIBLE
+                        binding.clearSearchBtn.setOnClickListener{
+                            sortedEntries.clear()
+                            sortedEntries.addAll(allEntries)
+                            adapter?.notifyDataSetChanged()
+                            it.visibility = View.GONE
+                        }
+                    }
+                    else{
+                        Log.i("HomeActivity", "intentExtras Failed")
+                        sortedEntries.addAll(entries)
+                        binding.clearSearchBtn.visibility = View.GONE
+                    }
+
+                    adapter = EntryAdapter(this, sortedEntries, ::deleteEntry)
                     binding.noEntryItem.visibility = View.GONE
                     binding.entryListView.visibility = View.VISIBLE
-                    binding.entryListView.adapter = EntryAdapter(this, entries, ::deleteEntry)
+                    binding.entryListView.adapter = adapter
+//                    sortEntriesByTitle()
                 }
+
             }
         }.start()
+    }
+    fun applyFilter(entries : List<Entry>, filterText : String, filterBy : String) : List<Entry> {
+        if(filterText.isNotEmpty()){
+            return when(filterBy) {
+                "Title" -> entries.filter { it.title.contains(filterText) }
+                "Text" ->  entries.filter { it.text.contains(filterText) }
+                "Color" ->  entries.filter { it.color.contains(filterText) }
+                else -> entries
+            }
+        }
+        return entries
+    }
+    fun sortEntries(entries : List<Entry>, sortByString : String, ascending : Boolean) : List<Entry> {
+        Log.i("SortBy", "$sortByString, Ascend: $ascending")
+        return when(sortByString) {
+            "Title" -> if(ascending) entries.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, {it.title})) else entries.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, {it.title})).reversed()
+            "dateCreated" -> if(ascending) entries.sortedBy { it.dateCreated } else entries.sortedByDescending { it.dateCreated }
+            else -> {
+                Log.i("SortBy", "else case hit")
+                entries
+            }
+        }
+    }
+    fun sortEntriesByTitle(){
+        sortedEntries.clear()
+        val results : List<Entry> = allEntries.sortedWith(compareBy { it.title })
+        sortedEntries.addAll(results)
+        adapter?.notifyDataSetChanged()
     }
 
     override fun onPause() {
@@ -89,7 +159,6 @@ class HomeActivity : AppCompatActivity() {
             }.start()
         }
     }
-
     /**
      * Start a dialog asking user if they really want to delete. Pass along the position
      * to the dialog.
@@ -98,22 +167,29 @@ class HomeActivity : AppCompatActivity() {
     private fun deleteEntry(pos: Int) {
         val dialog =
             DeleteEntryDialogFragment((this.application as SecretApp).journalManager::deleteEntry,
-                (this.application as SecretApp)::queueEntryFromPos)
+                (this.application as SecretApp)::queueEntryFromPos, {allEntries.removeAt(it)})
         val args = Bundle()
-        args.putInt("pos", pos)
+        val realPos : Int = adapterPosToEntryPos(pos)
+        args.putInt("pos", realPos)
         dialog.arguments = args
         dialog.show(
             this.supportFragmentManager, "delete_entry"
         )
     }
 
+    private fun adapterPosToEntryPos(pos : Int) : Int {
+        val entry : Entry = sortedEntries[pos]
+        val realPos : Int = entryToPos[entry] ?: -1
+        Log.i("DeleteAction", "input: $entry\noutput: ${allEntries[realPos]}")
+        return realPos
+    }
 
     /**
      * A custom Dialog Fragment that will use the callback fn to delete a journal entry
      * @param deleteFn The callback function to be call if user select "Yes" when prompted
      */
     class DeleteEntryDialogFragment(
-        val deleteFn: (Int) -> Boolean, val sendEntry: (Int) -> Unit
+        val deleteFn: (Int) -> Boolean, val sendEntry: (Int) -> Unit, val postDete : (Int) -> Unit
     ) : DialogFragment() {
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             return activity?.let {
