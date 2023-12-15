@@ -2,6 +2,7 @@ package edu.uw.ischool.opensecrets
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import edu.uw.ischool.opensecrets.databinding.OptionBinding
@@ -14,6 +15,8 @@ class OptionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = OptionBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.signatureEdit.visibility = View.GONE
+        binding.signatureTitle.visibility = View.GONE
         binding.minTimeInput.setText((this.application as SecretApp).optionManager.getMinTime().toString())
         binding.saveOptions.setOnClickListener {
             (this.application as SecretApp).optionManager.updateMinTime(
