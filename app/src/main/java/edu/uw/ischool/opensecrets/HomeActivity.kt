@@ -133,10 +133,14 @@ class HomeActivity : AppCompatActivity() {
         return entries
     }
     fun sortEntries(entries : List<Entry>, sortByString : String, ascending : Boolean) : List<Entry> {
+        Log.i("SortBy", "$sortByString, Ascend: $ascending")
         return when(sortByString) {
-            "Title" -> if(ascending) entries.sortedBy { it.title } else entries.sortedByDescending { it.title }
+            "Title" -> if(ascending) entries.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, {it.title})) else entries.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, {it.title})).reversed()
             "dateCreated" -> if(ascending) entries.sortedBy { it.dateCreated } else entries.sortedByDescending { it.dateCreated }
-            else -> entries
+            else -> {
+                Log.i("SortBy", "else case hit")
+                entries
+            }
         }
     }
     fun sortEntriesByTitle(){
@@ -163,7 +167,7 @@ class HomeActivity : AppCompatActivity() {
     private fun deleteEntry(pos: Int) {
         val dialog =
             DeleteEntryDialogFragment((this.application as SecretApp).journalManager::deleteEntry,
-                (this.application as SecretApp)::queueEntryFromPos)
+                (this.application as SecretApp)::queueEntryFromPos, {allEntries.removeAt(it)})
         val args = Bundle()
         val realPos : Int = adapterPosToEntryPos(pos)
         args.putInt("pos", realPos)
@@ -185,7 +189,7 @@ class HomeActivity : AppCompatActivity() {
      * @param deleteFn The callback function to be call if user select "Yes" when prompted
      */
     class DeleteEntryDialogFragment(
-        val deleteFn: (Int) -> Boolean, val sendEntry: (Int) -> Unit
+        val deleteFn: (Int) -> Boolean, val sendEntry: (Int) -> Unit, val postDete : (Int) -> Unit
     ) : DialogFragment() {
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             return activity?.let {

@@ -78,7 +78,7 @@ class SearchActivity : AppCompatActivity() {
                 HomeActivity::class.java
             ).apply {
                 putExtra(SORTBY, binding.sortSpinner.selectedItem as String)
-                putExtra(ASCEND, binding.ascendSpinner.selectedItem as String == "Ascend")
+                putExtra(ASCEND, binding.ascendSpinner.selectedItem as String == "Ascending")
                 val filterText : String = binding.filterEditText.text.toString()
                 Log.i("SearchActivity", "FilterText: $filterText")
                 if(filterText.isNotEmpty()){
